@@ -1,39 +1,19 @@
 import React from "react";
 import styled from "styled-components";
 import { VerticalWrapper } from "../../components/verticalWrapper";
-import { Filters, test, IShowcaseItem, FakeShowcaseItems } from "./constants";
-import { HorizontalWrapper } from "../../components/horizontalWrapper";
+import { IShowcaseItem, FakeShowcaseItems } from "./constants";
+import { Query } from "react-apollo";
+import gql from "graphql-tag";
+import { GET_PRODUCTS } from "./queries";
+import { GetProducts_products } from "../../typings/graphql-types";
+import { withRouter } from "react-router-dom";
+import { Filters } from "../../components/filterBar/constants";
+import { FilterBar } from "../../components/filterBar";
+import productsService from "../../services/products.service";
 
 const ProductsContainer = styled.div`
   width: 100%;
   overflow-y: auto;
-`;
-
-const FiltersContainer = styled.div`
-  width: 100%;
-  height: 5em;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-  align-items: center;
-  padding: 15px 2em;
-`;
-
-interface IFilterItemProps {
-  currentItem: string;
-  currentActive: string;
-}
-
-const FilterItem = styled.div`
-  color: ${(props: IFilterItemProps) =>
-    props.currentItem === props.currentActive
-      ? "#000"
-      : "rgba(15, 15, 15, 0.2)"};
-  font-size: 25px;
-  font-weight: 500;
-  font-weight: 700;
-  cursor: pointer;
-  transition: color 260ms ease-in-out;
 `;
 
 const ShowcaseContainer = styled.div`
@@ -44,8 +24,8 @@ const ShowcaseContainer = styled.div`
 `;
 
 const ShowcaseItem = styled.div`
-  max-width: 15em;
-  max-height: 15em;
+  max-width: 23em;
+  max-height: 23em;
   transition-property: filter;
   transition: 350ms ease-in-out;
   cursor: pointer;
@@ -60,17 +40,16 @@ const ShowcaseItem = styled.div`
   }
 `;
 
-export interface IProductsProps {}
+export interface IProductsProps {
+  history?: any;
+}
 
 export interface IProductsState {
   currentActive: string;
   showcaseItems: IShowcaseItem[];
 }
 
-export default class Products extends React.Component<
-  IProductsProps,
-  IProductsState
-> {
+class Products extends React.Component<IProductsProps, IProductsState> {
   state: IProductsState;
 
   constructor(props: IProductsProps) {
@@ -86,46 +65,54 @@ export default class Products extends React.Component<
     //TODO: Add Server Data Fetching here, fake data is used for now!
     const fakeShowcaseItems = Object.values(FakeShowcaseItems);
     this.setState({ showcaseItems: fakeShowcaseItems });
+    //Clear Stored products
+    productsService.clearLoadedProducts();
   }
 
   setAsActiveItem(itemKey: string) {
     this.setState({ currentActive: itemKey || Filters.tshirts.name });
   }
 
+  showcaseProduct(product: GetProducts_products) {
+    this.props.history.push(`/shop/${product.name}`);
+  }
+
   render() {
     const { currentActive, showcaseItems } = this.state;
-
-    const filterItems = Object.keys(Filters);
 
     return (
       <ProductsContainer>
         <VerticalWrapper>
-          <FiltersContainer>
-            {filterItems.map((itemKey, idx) => {
-              const item = Filters[itemKey];
-              return (
-                <FilterItem
-                  key={`${itemKey}-${idx}`}
-                  currentItem={itemKey}
-                  currentActive={currentActive}
-                  onClick={() => this.setAsActiveItem(itemKey)}
-                >
-                  {item.name}
-                </FilterItem>
-              );
-            })}
-          </FiltersContainer>
+          <FilterBar
+            currentActive={currentActive}
+            onItemClick={this.setAsActiveItem.bind(this)}
+          />
           <ShowcaseContainer>
-            {showcaseItems.map((item, idx) => {
-              return (
-                <ShowcaseItem key={`${item.name}-${idx}`}>
-                  <img src={item.imageURL} alt="" />
-                </ShowcaseItem>
-              );
-            })}
+            <Query query={GET_PRODUCTS}>
+              {(props: any) => {
+                if (props.loading) return <div>Loading...</div>;
+                if (props.error) return <div>Error...</div>;
+                return props.data.products.map(
+                  (item: GetProducts_products, idx: number) => {
+                    //Store Loaded Products
+                    productsService.addLoadedProduct(item);
+                    return (
+                      <ShowcaseItem
+                        key={`${item.name}-${idx}`}
+                        onClick={() => this.showcaseProduct(item)}
+                      >
+                        <img src={item.imageUrl} alt="" />
+                      </ShowcaseItem>
+                    );
+                  }
+                );
+              }}
+            </Query>
           </ShowcaseContainer>
         </VerticalWrapper>
       </ProductsContainer>
     );
   }
 }
+
+export default withRouter(Products as any);

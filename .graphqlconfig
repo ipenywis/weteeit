@@ -1,0 +1,6 @@
+{
+  "schemaPath": "schema.json",
+  "extensions": {
+    "schemaTypesPath": "src/App/typings"
+  }
+}
