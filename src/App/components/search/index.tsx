@@ -5,8 +5,8 @@ import SearchIcon from "../../../assets/images/search_icon.png";
 export interface ISearchProps {}
 
 const SearchContainer = styled.div`
-  width: 1.8em;
-  height: 1.8em;
+  width: 2.2em;
+  height: 2.2em;
   cursor: pointer;
   transition: filter 200ms ease-in-out;
 

@@ -8,8 +8,8 @@ export interface ICartProps {
 }
 
 const CartContainer = styled.div`
-  width: 1.8em;
-  height: 1.8em;
+  width: 2.2em;
+  height: 2.2em;
   position: relative;
   transition: filter, 200ms ease-in-out;
   cursor: pointer;
@@ -31,7 +31,7 @@ const Count = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   color: #fff;
-  font-size: 12px;
+  font-size: 17px;
   font-weight: 700;
   font-family: "Open Sans", sans-serif;
 `;
