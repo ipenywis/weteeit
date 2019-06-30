@@ -77,9 +77,13 @@ const Copyright = styled(Link)`
   color: #a5a5a5;
 `;
 
-export interface ISideNavigationProps {}
+export interface ISideNavigationProps {
+  cart?: number;
+}
 
 export function SideNavigation(props: ISideNavigationProps) {
+  const { cart } = props;
+
   return (
     <SideNavContainer>
       <TopNotch />
@@ -88,7 +92,7 @@ export function SideNavigation(props: ISideNavigationProps) {
           <BrandLogo size="lg" diagnol={true} />
           <MiscWrapper>
             <Search />
-            <Cart count={0} />
+            <Cart count={cart || 0} />
           </MiscWrapper>
         </TopSection>
         <MiddleSection>

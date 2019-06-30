@@ -24,7 +24,7 @@ const ShowcaseContainer = styled.div`
 `;
 
 const ShowcaseItem = styled.div`
-  max-width: 23em;
+  flex-basis: 23em;
   max-height: 23em;
   transition-property: filter;
   transition: 350ms ease-in-out;

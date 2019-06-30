@@ -1,9 +1,11 @@
 import React from "react";
 import styled, { css } from "styled-components/macro";
 import { DEFAULT_COLORS } from "./constants";
+import { VerticalWrapper } from "../verticalWrapper";
 
 export interface IColorSelectorProps {
   selected: string;
+  showSelectedColorName?: boolean;
   //The Actual Color name will be passed-in as parameter
   onSelect: (color: string) => void;
 }
@@ -11,7 +13,9 @@ export interface IColorSelectorProps {
 const ColorSelectorContainer = styled.div`
   width: 100%;
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
 `;
 
 const InnerContainer = styled.div`
@@ -45,8 +49,15 @@ const Color = styled.div`
   }
 `;
 
-export function ColorSelector(props: IColorSelectorProps) {
-  const { selected, onSelect } = props;
+const ColorName = styled.div`
+  font-size: 16px;
+  color: #3d3d3d;
+  margin-top: 1em;
+  font-weight: 600;
+`;
+
+function ColorSelector(props: IColorSelectorProps) {
+  const { selected, onSelect, showSelectedColorName } = props;
   const colorValues = Object.values(DEFAULT_COLORS);
   return (
     <ColorSelectorContainer>
@@ -57,15 +68,24 @@ export function ColorSelector(props: IColorSelectorProps) {
             key => DEFAULT_COLORS[key] === color
           );
           return (
-            <Color
-              key={`${color}-${idx}`}
-              color={colorName as string}
-              selected={selected}
-              onClick={() => onSelect(colorName as string)}
-            />
+            <VerticalWrapper>
+              <Color
+                key={`${color}-${idx}`}
+                color={colorName as string}
+                selected={selected}
+                onClick={() => onSelect(colorName as string)}
+              />
+            </VerticalWrapper>
           );
         })}
       </InnerContainer>
+      {showSelectedColorName && <ColorName>{selected}</ColorName>}
     </ColorSelectorContainer>
   );
 }
+
+ColorSelector.defaultProps = {
+  showSelectedColorName: true
+};
+
+export { ColorSelector };

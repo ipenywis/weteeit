@@ -2,20 +2,21 @@ import React from "react";
 import styled from "styled-components/macro";
 import { HorizontalWrapper } from "../../components/horizontalWrapper";
 import { VerticalWrapper } from "../../components/verticalWrapper";
-import { Divider } from "../../components/divider";
 import { FilterBar } from "../../components/filterBar";
 import { Filters } from "../../components/filterBar/constants";
-import productsService from "../../services/products.service";
 import { Query } from "react-apollo";
 import { GetProducts_products as IProduct } from "../../typings/graphql-types";
-import Wrapper from "../../components/wrapper";
 import { GET_PRODUCT } from "./queries";
-import { ProductInfo } from "./productInfo";
+import ProductInfo from "./productInfo";
 import { ErrorWrapper } from "../../components/error";
 import messages from "./messages";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { withRouter } from "react-router-dom";
 
 export interface IProductProps {
   productName: string;
+  history: any;
 }
 
 const ProductContainer = styled(VerticalWrapper)`
@@ -26,6 +27,18 @@ const ProductContainer = styled(VerticalWrapper)`
 const UpperContainer = styled.div`
   width: 100%;
   position: relative;
+  display: flex;
+  justify-content: flex-start;
+  padding: 0 15px;
+
+  svg {
+    transition: transform 400ms ease-in-out;
+  }
+
+  svg:hover {
+    transform: translateX(-3px);
+    cursor: pointer;
+  }
 `;
 
 const InnerContainer = styled(HorizontalWrapper)`
@@ -43,6 +56,7 @@ const LeftContainer = styled.div`
 const RightContainer = styled.div`
   height: 100%;
   width: 100%;
+  flex-basis: 100%;
   img {
     width: 100%;
     height: 100%;
@@ -58,7 +72,7 @@ interface IProductState {
   currentActive: string;
 }
 
-export class Product extends React.Component<IProductProps, IProductState> {
+class Product extends React.Component<IProductProps, IProductState> {
   state: IProductState;
 
   constructor(props: IProductProps) {
@@ -70,6 +84,11 @@ export class Product extends React.Component<IProductProps, IProductState> {
 
   setCurrentActiveFilter(itemKey: string) {
     this.setState({ currentActive: itemKey });
+  }
+
+  onGoBackClick() {
+    const { history } = this.props;
+    history.goBack();
   }
 
   renderLeftSide(product: IProduct) {
@@ -93,7 +112,6 @@ export class Product extends React.Component<IProductProps, IProductState> {
   render() {
     const { currentActive } = this.state;
     const { productName } = this.props;
-    console.log("Product Component Props ", this.props);
 
     return (
       <ProductContainer>
@@ -102,7 +120,11 @@ export class Product extends React.Component<IProductProps, IProductState> {
             currentActive={currentActive}
             onItemClick={this.setCurrentActiveFilter.bind(this)}
           />
-          <UpperContainer>X</UpperContainer>
+          <UpperContainer>
+            <div onClick={this.onGoBackClick.bind(this)}>
+              <FontAwesomeIcon icon={faArrowLeft} size="lg" />
+            </div>
+          </UpperContainer>
           <InnerContainer>
             <Query query={GET_PRODUCT} variables={{ name: productName }}>
               {(props: any) => {
@@ -114,18 +136,11 @@ export class Product extends React.Component<IProductProps, IProductState> {
                   );
                 }
                 const item = props.data.product as IProduct;
-                console.log("Product ", item);
                 return (
                   <InnerContainer>
                     {this.renderLeftSide(item)}
                     {this.renderRightSide(item)}
                   </InnerContainer>
-                  /*<ShowcaseItem
-                        key={`${item.name}-${idx}`}
-                        onClick={() => this.showcaseProduct(item)}
-                      >
-                        <img src={item.imageUrl} alt="" />
-                      </ShowcaseItem>*/
                 );
               }}
             </Query>
@@ -135,3 +150,5 @@ export class Product extends React.Component<IProductProps, IProductState> {
     );
   }
 }
+
+export default withRouter<any>(Product as any);

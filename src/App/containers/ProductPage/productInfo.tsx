@@ -4,6 +4,10 @@ import { VerticalWrapper } from "../../components/verticalWrapper";
 import { Divider } from "../../components/divider";
 import { SizeSelector } from "../../components/sizeSelector";
 import { ColorSelector } from "../../components/colorSelector";
+import { HorizontalWrapper } from "../../components/horizontalWrapper";
+import { Button } from "../../components/button";
+import { NumericInput } from "../../components/numericInput";
+import { withRouter } from "react-router-dom";
 
 export interface IProductInfoProps {
   name: string;
@@ -37,13 +41,20 @@ const Price = styled.div`
   font-weight: 800;
 `;
 
-export function ProductInfo(props: IProductInfoProps) {
+const QuantityContainer = styled(HorizontalWrapper)`
+  width: 100%;
+  margin-top: 2em;
+`;
+
+function ProductInfo(props: IProductInfoProps) {
   const { name, price } = props;
   const currency = "DZD";
   //Size State
   const [size, updateSize] = useState("M");
   //Color State
   const [color, updateColor] = useState("black");
+  //Quantity State
+  const [quantity, updateQuantity] = useState("1");
 
   return (
     <ProductInfoContainer>
@@ -62,10 +73,21 @@ export function ProductInfo(props: IProductInfoProps) {
       <ColorSelector
         selected={color}
         onSelect={colorName => {
-          console.log("Here and there", colorName);
           updateColor(colorName);
         }}
       />
+      <Divider />
+      <QuantityContainer width="100%" spaceEvenly>
+        <NumericInput
+          value={quantity}
+          onChange={e =>
+            parseInt(e.target.value) >= 1 && updateQuantity(e.target.value)
+          }
+        />
+        <Button large={true}>Add to Cart</Button>
+      </QuantityContainer>
     </ProductInfoContainer>
   );
 }
+
+export default withRouter(ProductInfo as any);

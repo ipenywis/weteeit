@@ -2,7 +2,7 @@ import React from "react";
 import { PageContainer } from "../../components/pageContainer";
 import { HorizontalWrapper } from "../../components/horizontalWrapper";
 import { SideNavigation } from "../../components/sideNavigation";
-import { Product } from "./product";
+import Product from "./product";
 
 export default function ProductPage(props: any) {
   return (

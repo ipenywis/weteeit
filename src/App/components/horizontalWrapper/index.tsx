@@ -5,6 +5,7 @@ interface IHorizontalWrapperProps {
   width?: string;
   height?: string;
   spaceBetween?: boolean;
+  spaceEvenly?: boolean;
   children?: any[] | any;
 }
 
@@ -14,7 +15,9 @@ const HorizontalContainer = styled.div`
   width: ${({ width }: IHorizontalWrapperProps) => (width ? width : "auto")};
   height: ${({ height }: IHorizontalWrapperProps) =>
     height ? height : "auto"};
-  justify-content: ${props => props.spaceBetween && "space-between"};
+  justify-content: ${props =>
+    (props.spaceBetween && "space-between") ||
+    (props.spaceEvenly && "space-evenly")};
 `;
 
 export function HorizontalWrapper(props: IHorizontalWrapperProps) {
