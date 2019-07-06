@@ -4,7 +4,7 @@ import { Filters, IFilterItem } from "./constants";
 
 export interface IFilterBarProps {
   currentActive: string;
-  onItemClick: (item: string) => void;
+  onItemClick: (itemKey: string, item: IFilterItem) => void;
 }
 
 const FiltersContainer = styled.div`
@@ -46,7 +46,7 @@ export function FilterBar(props: IFilterBarProps) {
             key={`${itemKey}-${idx}`}
             currentItem={itemKey}
             currentActive={props.currentActive}
-            onClick={() => props.onItemClick(itemKey)}
+            onClick={() => props.onItemClick(itemKey, item)}
           >
             {item.name}
           </FilterItem>

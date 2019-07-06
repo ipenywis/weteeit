@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 export interface IErrorProps {
-  message: string;
+  message: string | any;
 }
 
 export const ErrorContainer = styled.div`
@@ -28,10 +28,18 @@ const ErrorMessage = styled.div`
 `;
 
 export function ErrorWrapper(props: IErrorProps) {
+  let message = "Error!";
+  if (typeof props.message === "object") {
+    if (props.message.statusCode && props.message.statusCode === 404)
+      message = "Data Not Found, Please try again later!";
+  } else {
+    message = props.message;
+  }
+
   return (
     <ErrorContainer>
       <ErrorText>Error !</ErrorText>
-      <ErrorMessage>{props.message}</ErrorMessage>
+      <ErrorMessage>{message}</ErrorMessage>
     </ErrorContainer>
   );
 }

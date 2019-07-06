@@ -11,26 +11,26 @@ export interface IFilterItem {
 export const Filters: IFilters = {
   tshirts: {
     name: "Tshirts",
-    filter: name => {}
+    query: "tshirt"
   },
   Sweatshirts: {
-    name: "Tshirts",
-    filter: name => {}
+    name: "Sweatshirts",
+    query: "sweatshirt"
   },
   Hoodies: {
-    name: "Tshirts",
-    filter: name => {}
+    name: "Hoodies",
+    query: "hoodie"
   },
   Posters: {
-    name: "Tshirts",
-    filter: name => {}
+    name: "Posters",
+    query: "poster"
   },
   Mugs: {
-    name: "Tshirts",
-    filter: name => {}
+    name: "Mugs",
+    query: "mug"
   },
   Pillows: {
-    name: "Tshirts",
-    filter: name => {}
+    name: "Pillows",
+    query: "pillow"
   }
 };
