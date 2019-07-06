@@ -7,11 +7,18 @@ import { ColorSelector } from "../../components/colorSelector";
 import { HorizontalWrapper } from "../../components/horizontalWrapper";
 import { Button } from "../../components/button";
 import { NumericInput } from "../../components/numericInput";
-import { withRouter } from "react-router-dom";
+import { withRouter, match } from "react-router-dom";
+import { IAppContextProps } from "../../app.context";
+import { Location, History } from "history";
+import { ICartItem } from "../../typings/cart";
+import { GetProducts_products as IProduct } from "../../typings/graphql-types";
 
-export interface IProductInfoProps {
-  name: string;
-  price: number;
+export interface IProductInfoProps extends IProduct {
+  location: Location;
+  history: History;
+  match: match;
+  cart: IAppContextProps["cart"];
+  setCart: IAppContextProps["setCart"];
 }
 
 const ProductInfoContainer = styled(VerticalWrapper)`
@@ -47,14 +54,32 @@ const QuantityContainer = styled(HorizontalWrapper)`
 `;
 
 function ProductInfo(props: IProductInfoProps) {
-  const { name, price } = props;
+  const { id, __typename, type, name, price, imageUrl, cart, setCart } = props;
   const currency = "DZD";
   //Size State
   const [size, updateSize] = useState("M");
   //Color State
   const [color, updateColor] = useState("black");
   //Quantity State
-  const [quantity, updateQuantity] = useState("1");
+  const [quantity, updateQuantity] = useState(1);
+
+  const item: ICartItem = {
+    __typename,
+    id,
+    type,
+    name,
+    price,
+    size,
+    color,
+    quantity,
+    imageUrl
+  };
+
+  const addToCart = (item: ICartItem) => {
+    setCart(prevCartItems => {
+      return [...prevCartItems, item];
+    });
+  };
 
   return (
     <ProductInfoContainer>
@@ -81,13 +106,16 @@ function ProductInfo(props: IProductInfoProps) {
         <NumericInput
           value={quantity}
           onChange={e =>
-            parseInt(e.target.value) >= 1 && updateQuantity(e.target.value)
+            parseInt(e.target.value) >= 1 &&
+            updateQuantity(parseInt(e.target.value))
           }
         />
-        <Button large={true}>Add to Cart</Button>
+        <Button large={true} onClick={() => addToCart(item)}>
+          Add to Cart
+        </Button>
       </QuantityContainer>
     </ProductInfoContainer>
   );
 }
 
-export default withRouter(ProductInfo as any);
+export default withRouter<IProductInfoProps>(ProductInfo);

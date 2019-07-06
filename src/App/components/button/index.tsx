@@ -2,13 +2,13 @@ import React from "react";
 import styled from "styled-components/macro";
 import { Link } from "react-router-dom";
 export interface IButtonProps {
-  /** Component to render as Button Container*/
-  //component?: JSX.Element;
+  /** Component to render as Button Container*/ omponent?: JSX.Element;
   /** Path to navigate to on button click */
   to?: string;
-  children?: any;
+  children: any;
   large?: boolean;
   uppercase?: boolean;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 export const ButtonContainer = styled.button`
@@ -37,11 +37,14 @@ function Button(props: IButtonProps) {
 
   if (to)
     return (
-      <ButtonContainer {...props}>
+      <ButtonContainer {...props as any}>
         <Link to={to}>{props.children}</Link>
       </ButtonContainer>
     );
-  else return <ButtonContainer {...props}>{props.children}</ButtonContainer>;
+  else
+    return (
+      <ButtonContainer {...props as any}>{props.children}</ButtonContainer>
+    );
 }
 
 Button.defaultProps = {

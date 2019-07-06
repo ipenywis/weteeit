@@ -14,6 +14,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { withRouter } from "react-router-dom";
 import { History } from "history";
+import { AppContext, IAppContextProps } from "../../app.context";
+import { ICartItem } from "../../typings/cart";
 
 export interface IProductProps {
   productName: string;
@@ -97,10 +99,14 @@ class Product extends React.Component<IProductProps, IProductState> {
     history.goBack();
   }
 
-  renderLeftSide(product: IProduct) {
+  renderLeftSide(
+    product: IProduct,
+    cart: IAppContextProps["cart"],
+    setCart: IAppContextProps["setCart"]
+  ) {
     return (
       <LeftContainer>
-        <ProductInfo {...product} />
+        <ProductInfo {...product} setCart={setCart} cart={cart} />
       </LeftContainer>
     );
   }
@@ -120,39 +126,47 @@ class Product extends React.Component<IProductProps, IProductState> {
     const { productName } = this.props;
 
     return (
-      <ProductContainer>
-        <VerticalWrapper width="100%" height="100%">
-          <FilterBar
-            currentActive={currentActive}
-            onItemClick={this.onFilterItemClick.bind(this)}
-          />
-          <UpperContainer>
-            <div onClick={this.onGoBackClick.bind(this)}>
-              <FontAwesomeIcon icon={faArrowLeft} size="lg" />
-            </div>
-          </UpperContainer>
-          <InnerContainer>
-            <Query query={GET_PRODUCT} variables={{ name: productName }}>
-              {(props: any) => {
-                if (props.loading) return <div>Loading...</div>;
-                if (props.error) {
-                  console.log("Error loading product: ", props.error);
-                  return (
-                    <ErrorWrapper message={messages.errorLoadingProduct} />
-                  );
-                }
-                const item = props.data.product as IProduct;
-                return (
-                  <InnerContainer>
-                    {this.renderLeftSide(item)}
-                    {this.renderRightSide(item)}
-                  </InnerContainer>
-                );
-              }}
-            </Query>
-          </InnerContainer>
-        </VerticalWrapper>
-      </ProductContainer>
+      <AppContext.Consumer>
+        {({ cart, setCart }) => {
+          return (
+            <ProductContainer>
+              <VerticalWrapper width="100%" height="100%">
+                <FilterBar
+                  currentActive={currentActive}
+                  onItemClick={this.onFilterItemClick.bind(this)}
+                />
+                <UpperContainer>
+                  <div onClick={this.onGoBackClick.bind(this)}>
+                    <FontAwesomeIcon icon={faArrowLeft} size="lg" />
+                  </div>
+                </UpperContainer>
+                <InnerContainer>
+                  <Query query={GET_PRODUCT} variables={{ name: productName }}>
+                    {(props: any) => {
+                      if (props.loading) return <div>Loading...</div>;
+                      if (props.error) {
+                        console.log("Error loading product: ", props.error);
+                        return (
+                          <ErrorWrapper
+                            message={messages.errorLoadingProduct}
+                          />
+                        );
+                      }
+                      const item = props.data.product as IProduct;
+                      return (
+                        <InnerContainer>
+                          {this.renderLeftSide(item, cart, setCart)}
+                          {this.renderRightSide(item)}
+                        </InnerContainer>
+                      );
+                    }}
+                  </Query>
+                </InnerContainer>
+              </VerticalWrapper>
+            </ProductContainer>
+          );
+        }}
+      </AppContext.Consumer>
     );
   }
 }
