@@ -3,7 +3,7 @@ import styled from "styled-components/macro";
 import { HorizontalWrapper } from "../../components/horizontalWrapper";
 import { VerticalWrapper } from "../../components/verticalWrapper";
 import { FilterBar } from "../../components/filterBar";
-import { Filters } from "../../components/filterBar/constants";
+import { Filters, IFilterItem } from "../../components/filterBar/constants";
 import { Query } from "react-apollo";
 import { GetProducts_products as IProduct } from "../../typings/graphql-types";
 import { GET_PRODUCT } from "./queries";
@@ -13,10 +13,11 @@ import messages from "./messages";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { withRouter } from "react-router-dom";
+import { History } from "history";
 
 export interface IProductProps {
   productName: string;
-  history: any;
+  history: History;
 }
 
 const ProductContainer = styled(VerticalWrapper)`
@@ -78,12 +79,17 @@ class Product extends React.Component<IProductProps, IProductState> {
   constructor(props: IProductProps) {
     super(props);
     this.state = {
-      currentActive: Filters.tshirts.name
+      currentActive: Filters.tshirt.name
     };
   }
+  setAsActiveItem(itemKey: string) {
+    this.setState({ currentActive: itemKey || Filters.tshirt.name });
+  }
 
-  setCurrentActiveFilter(itemKey: string) {
-    this.setState({ currentActive: itemKey });
+  onFilterItemClick(itemKey: string, item: IFilterItem) {
+    this.setAsActiveItem(itemKey);
+    //TODO: Support other filter appliers | only supports query for now
+    this.props.history && this.props.history.push(`/shop?type=${item.query}`);
   }
 
   onGoBackClick() {
@@ -118,7 +124,7 @@ class Product extends React.Component<IProductProps, IProductState> {
         <VerticalWrapper width="100%" height="100%">
           <FilterBar
             currentActive={currentActive}
-            onItemClick={this.setCurrentActiveFilter.bind(this)}
+            onItemClick={this.onFilterItemClick.bind(this)}
           />
           <UpperContainer>
             <div onClick={this.onGoBackClick.bind(this)}>

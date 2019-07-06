@@ -59,7 +59,7 @@ class Products extends React.Component<IProductsProps, IProductsState> {
     super(props);
 
     this.state = {
-      currentActive: Filters.tshirts.name,
+      currentActive: Filters.tshirt.name,
       showcaseItems: []
     };
   }
@@ -68,12 +68,10 @@ class Products extends React.Component<IProductsProps, IProductsState> {
     //TODO: Add Server Data Fetching here, fake data is used for now!
     const fakeShowcaseItems = Object.values(FakeShowcaseItems);
     this.setState({ showcaseItems: fakeShowcaseItems });
-    //Clear Stored products
-    productsService.clearLoadedProducts();
   }
 
   setAsActiveItem(itemKey: string) {
-    this.setState({ currentActive: itemKey || Filters.tshirts.name });
+    this.setState({ currentActive: itemKey || Filters.tshirt.name });
   }
 
   onFilterItemClick(itemKey: string, item: IFilterItem) {
@@ -89,13 +87,11 @@ class Products extends React.Component<IProductsProps, IProductsState> {
   componentDidMount() {
     //set type by default onmount
     this.props.history &&
-      this.props.history.replace(`/shop?type=${Filters.tshirts.query}`);
-    //this.props.history &&
-    //this.props.history.push(`/shop/${Filters.tshirts.query}`);
+      this.props.history.replace(`/shop?type=${Filters.tshirt.query}`);
   }
 
   render() {
-    const { currentActive, showcaseItems } = this.state;
+    const { currentActive } = this.state;
     const { location } = this.props;
     const queryParams = new URLSearchParams(location && location.search);
     const productType = queryParams.get("type");
@@ -103,7 +99,7 @@ class Products extends React.Component<IProductsProps, IProductsState> {
       <ProductsContainer>
         <VerticalWrapper>
           <FilterBar
-            currentActive={currentActive}
+            currentActive={productType as string}
             onItemClick={this.onFilterItemClick.bind(this)}
           />
           <ShowcaseContainer>
