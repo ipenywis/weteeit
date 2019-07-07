@@ -53,8 +53,20 @@ const QuantityContainer = styled(HorizontalWrapper)`
   margin-top: 2em;
 `;
 
+const InfoContainer = styled(VerticalWrapper)`
+  width: 100%;
+  margin-top: 1em;
+  align-items: center;
+`;
+
+const InfoText = styled.div`
+  font-size: 16px;
+  color: rgba(15, 15, 15, 0.4);
+`;
+
 function ProductInfo(props: IProductInfoProps) {
   const { id, __typename, type, name, price, imageUrl, cart, setCart } = props;
+
   const currency = "DZD";
   //Size State
   const [size, updateSize] = useState("M");
@@ -74,6 +86,10 @@ function ProductInfo(props: IProductInfoProps) {
     quantity,
     imageUrl
   };
+
+  const isItemInCart = cart.some(cartItem => {
+    return item.name === cartItem.name;
+  });
 
   const addToCart = (item: ICartItem) => {
     setCart(prevCartItems => {
@@ -110,10 +126,19 @@ function ProductInfo(props: IProductInfoProps) {
             updateQuantity(parseInt(e.target.value))
           }
         />
-        <Button large={true} onClick={() => addToCart(item)}>
+        <Button
+          large={true}
+          onClick={() => addToCart(item)}
+          disabled={isItemInCart}
+        >
           Add to Cart
         </Button>
       </QuantityContainer>
+      <InfoContainer>
+        {isItemInCart && (
+          <InfoText>This {item.type} is already in your Cart</InfoText>
+        )}
+      </InfoContainer>
     </ProductInfoContainer>
   );
 }

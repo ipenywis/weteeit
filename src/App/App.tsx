@@ -9,6 +9,7 @@ import { ApolloProvider } from "react-apollo";
 import ApolloClient from "apollo-boost";
 import { AppContext } from "./app.context";
 import { ICartItem } from "./typings/cart";
+import CartPage from "./containers/cartPage";
 
 const App: React.FC = () => {
   //Apollo GraphQL Client
@@ -33,7 +34,22 @@ const App: React.FC = () => {
     });
   };
 
-  const AppContextValue = { cart, setCart: setCartWithConstraints };
+  const updateCartItem = (name: string, newItem: ICartItem) => {
+    setCart(cartItems => {
+      const updatedCartItems = cartItems.map(item => {
+        if (item.name === name) return newItem;
+        return item;
+      });
+      console.warn("Updated Cart Items: ", updatedCartItems);
+      return updatedCartItems;
+    });
+  };
+
+  const AppContextValue = {
+    cart,
+    setCart: setCartWithConstraints,
+    updateCartItem
+  };
 
   return (
     <ApolloProvider client={client}>
@@ -45,6 +61,7 @@ const App: React.FC = () => {
               <Route exact path="/" component={HomePage} />
               <Route exact path="/shop" component={ShopPage} />
               <Route exact path="/shop/:name" component={ProductPage} />
+              <Route exact path="/cart" component={CartPage} />
             </Switch>
           </Router>
         </div>

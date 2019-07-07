@@ -1,10 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 import CartIcon from "../../../assets/images/cart_icon.png";
+import { Link } from "react-router-dom";
 
 export interface ICartProps {
   count: number;
   style?: React.CSSProperties;
+  pathname: string;
+  onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
 const CartContainer = styled.div`
@@ -37,10 +40,14 @@ const Count = styled.div`
 `;
 
 export function Cart(props: ICartProps) {
+  const { onClick, pathname } = props;
+
   return (
-    <CartContainer style={props.style}>
-      <img src={CartIcon} alt="" />
-      <Count>{props.count}</Count>
-    </CartContainer>
+    <Link to={pathname}>
+      <CartContainer style={props.style} onClick={onClick}>
+        <img src={CartIcon} alt="" />
+        <Count>{props.count}</Count>
+      </CartContainer>
+    </Link>
   );
 }

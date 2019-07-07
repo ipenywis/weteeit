@@ -92,7 +92,7 @@ export function SideNavigation(props: ISideNavigationProps) {
           <BrandLogo size="lg" diagnol={true} />
           <MiscWrapper>
             <Search />
-            <Cart count={cart || 0} />
+            <Cart count={cart || 0} pathname="/cart" />
           </MiscWrapper>
         </TopSection>
         <MiddleSection>

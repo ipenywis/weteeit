@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { SIZES } from "./constants";
+import { Dropdown } from "../dropdown";
 
 export interface ISizeSelectorProps {
   selected: string;
@@ -62,4 +63,17 @@ export function SizeSelector(props: ISizeSelectorProps) {
       ))}
     </SelectorContainer>
   );
+}
+
+export function SizeDropdown(props: Partial<ISizeSelectorProps>) {
+  const { selected } = props;
+
+  const onSizeSelect = (
+    e: React.SyntheticEvent<HTMLOptionElement>,
+    size: string
+  ) => {
+    props.onSelect && props.onSelect(size);
+  };
+
+  return <Dropdown options={SIZES} onSelect={onSizeSelect} />;
 }

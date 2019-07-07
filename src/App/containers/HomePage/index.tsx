@@ -25,6 +25,10 @@ const HomePageContainer = styled.div`
   justify-content: space-between;
 `;
 
+const CustomBorderButton = styled(BorderButton)`
+  font-size: 30px;
+`;
+
 export default class HomePage extends React.Component {
   render() {
     return (
@@ -32,12 +36,12 @@ export default class HomePage extends React.Component {
         <HomePageContainer>
           <BrandLogo size="xxl" style={{ marginTop: "4.5em" }} />
           <HorizontalWrapper>
-            <BorderButton large={true} uppercase={true} to="/shop">
+            <CustomBorderButton large={true} uppercase={true} to="/shop">
               Shop
-            </BorderButton>
-            <BorderButton large={true} uppercase={true}>
+            </CustomBorderButton>
+            <CustomBorderButton large={true} uppercase={true}>
               Submit Your Design
-            </BorderButton>
+            </CustomBorderButton>
           </HorizontalWrapper>
           <Social />
         </HomePageContainer>

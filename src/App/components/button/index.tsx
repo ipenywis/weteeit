@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components/macro";
+import styled, { css } from "styled-components/macro";
 import { Link } from "react-router-dom";
 export interface IButtonProps {
   /** Component to render as Button Container*/ omponent?: JSX.Element;
@@ -8,6 +8,7 @@ export interface IButtonProps {
   children: any;
   large?: boolean;
   uppercase?: boolean;
+  disabled?: boolean;
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
@@ -29,6 +30,12 @@ export const ButtonContainer = styled.button`
   &:hover {
     background-color: transparent;
     color: #3d3d3d;
+  }
+
+  &:disabled {
+    background-color: #a2a2a2;
+    color: #000;
+    cursor: not-allowed;
   }
 `;
 
