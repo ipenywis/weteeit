@@ -69,11 +69,17 @@ export function SizeDropdown(props: Partial<ISizeSelectorProps>) {
   const { selected } = props;
 
   const onSizeSelect = (
-    e: React.SyntheticEvent<HTMLOptionElement>,
+    e: React.ChangeEvent<HTMLSelectElement>,
     size: string
   ) => {
     props.onSelect && props.onSelect(size);
   };
 
-  return <Dropdown options={SIZES} onSelect={onSizeSelect} />;
+  return (
+    <Dropdown
+      options={SIZES}
+      onSelect={onSizeSelect}
+      selected={props.selected}
+    />
+  );
 }

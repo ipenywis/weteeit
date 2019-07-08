@@ -4,14 +4,11 @@ import styled from "styled-components";
 export interface IDropdownProps {
   options: string[];
   selected?: string;
-  onSelect: (
-    e: React.SyntheticEvent<HTMLOptionElement>,
-    option: string
-  ) => void;
+  onSelect: (e: React.ChangeEvent<HTMLSelectElement>, option: string) => void;
 }
 
 const DropdownContainer = styled.select`
-  width: 4.6em;
+  min-width: 4.6em;
   min-height: 2.6em;
   border: 4px solid #3d3d3d;
   color: #3d3d3d;
@@ -20,17 +17,18 @@ const DropdownContainer = styled.select`
   font-family: "Open Sans", sans-serif;
   padding: 14px;
   outline: none;
+  margin: 0.6em;
 `;
 
 export function Dropdown(props: IDropdownProps) {
-  const { options, onSelect } = props;
+  const { options, onSelect, selected } = props;
 
   return (
-    <DropdownContainer>
+    <DropdownContainer onChange={e => onSelect(e, e.target.value)}>
       {options.map((option, idx) => (
         <option
           key={`${option.toString()}-${idx}`}
-          onSelect={e => onSelect(e, option)}
+          selected={option === selected}
         >
           {option}
         </option>

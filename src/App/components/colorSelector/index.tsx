@@ -2,6 +2,8 @@ import React from "react";
 import styled, { css } from "styled-components/macro";
 import { DEFAULT_COLORS } from "./constants";
 import { VerticalWrapper } from "../verticalWrapper";
+import { Dropdown } from "../dropdown";
+import { IAppContextProps } from "../../app.context";
 
 export interface IColorSelectorProps {
   selected: string;
@@ -88,4 +90,23 @@ ColorSelector.defaultProps = {
   showSelectedColorName: true
 };
 
-export { ColorSelector };
+function ColorDropdown(props: Partial<IColorSelectorProps>) {
+  const colors = Object.keys(DEFAULT_COLORS);
+
+  const onColorSelect = (
+    e: React.ChangeEvent<HTMLSelectElement>,
+    color: string
+  ) => {
+    props.onSelect && props.onSelect(color);
+  };
+
+  return (
+    <Dropdown
+      options={colors}
+      onSelect={onColorSelect}
+      selected={props.selected}
+    />
+  );
+}
+
+export { ColorSelector, ColorDropdown };

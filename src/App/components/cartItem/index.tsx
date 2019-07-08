@@ -4,6 +4,7 @@ import { VerticalWrapper } from "../verticalWrapper";
 import { SizeDropdown } from "../sizeSelector";
 import { ICartItem } from "../../typings/cart";
 import { IAppContextProps } from "../../app.context";
+import { ColorDropdown } from "../colorSelector";
 
 export interface ICartItemProps extends ICartItem {
   updateCartItem: IAppContextProps["updateCartItem"];
@@ -79,6 +80,10 @@ export function CartItem(props: ICartItemProps) {
     updateCartItem(name, { ...item, size });
   };
 
+  const onColorChange = (color: string) => {
+    updateCartItem(name, { ...item, color });
+  };
+
   return (
     <CartItemContainer>
       <Image>
@@ -88,7 +93,8 @@ export function CartItem(props: ICartItemProps) {
         <Name>{name}</Name>
         <MutedText>{price} DZD</MutedText>
       </DetailsContainer>
-      <SizeDropdown onSelect={onSizeChange} />
+      <SizeDropdown onSelect={onSizeChange} selected={item.size} />
+      <ColorDropdown onSelect={onColorChange} selected={item.color} />
     </CartItemContainer>
   );
 }
