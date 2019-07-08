@@ -8,6 +8,7 @@ import { IAppContextProps } from "../../app.context";
 export interface ICartProps {
   cart: ICartItem[];
   updateCartItem: IAppContextProps["updateCartItem"];
+  removeCartItem: IAppContextProps["removeCartItem"];
 }
 
 const CartContainer = styled(VerticalWrapper)`
@@ -46,7 +47,7 @@ export class ShoppingCart extends React.Component<ICartProps> {
   }
 
   render() {
-    const { cart, updateCartItem } = this.props;
+    const { cart, updateCartItem, removeCartItem } = this.props;
 
     return (
       <CartContainer>
@@ -60,10 +61,11 @@ export class ShoppingCart extends React.Component<ICartProps> {
               {...cartItem}
               key={`${cartItem.name}-${idx}`}
               updateCartItem={updateCartItem}
+              removeCartItem={removeCartItem}
             />
           ))}
         {cart.length === 0 && (
-          <CartIsEmptyWarning>Cart is Empty!</CartIsEmptyWarning>
+          <CartIsEmptyWarning>Your Cart is Empty!</CartIsEmptyWarning>
         )}
       </CartContainer>
     );

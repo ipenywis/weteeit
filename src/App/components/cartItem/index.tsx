@@ -5,9 +5,13 @@ import { SizeDropdown } from "../sizeSelector";
 import { ICartItem } from "../../typings/cart";
 import { IAppContextProps } from "../../app.context";
 import { ColorDropdown } from "../colorSelector";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import { NumericInput } from "../numericInput";
 
 export interface ICartItemProps extends ICartItem {
   updateCartItem: IAppContextProps["updateCartItem"];
+  removeCartItem: IAppContextProps["removeCartItem"];
 }
 
 const CartItemContainer = styled.div`
@@ -19,6 +23,7 @@ const CartItemContainer = styled.div`
   display: flex;
   margin-top: 3em;
   align-items: center;
+  position: relative;
 `;
 
 const Image = styled.div`
@@ -50,6 +55,21 @@ const MutedText = styled.div`
   width: fit-content;
 `;
 
+const RemoveIconWrapper = styled.div`
+  position: absolute;
+  right: 3em;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+
+  svg {
+    transition: filter 180ms ease-in-out;
+    &:hover {
+      filter: contrast(0.3);
+    }
+  }
+`;
+
 export function CartItem(props: ICartItemProps) {
   const {
     name,
@@ -61,7 +81,8 @@ export function CartItem(props: ICartItemProps) {
     imageUrl,
     price,
     __typename,
-    updateCartItem
+    updateCartItem,
+    removeCartItem
   } = props;
 
   const item: ICartItem = {
@@ -84,6 +105,14 @@ export function CartItem(props: ICartItemProps) {
     updateCartItem(name, { ...item, color });
   };
 
+  const onQuantityChange = (quantity: number) => {
+    updateCartItem(name, { ...item, quantity });
+  };
+
+  const removeItemFromCart = () => {
+    removeCartItem(name);
+  };
+
   return (
     <CartItemContainer>
       <Image>
@@ -95,6 +124,13 @@ export function CartItem(props: ICartItemProps) {
       </DetailsContainer>
       <SizeDropdown onSelect={onSizeChange} selected={item.size} />
       <ColorDropdown onSelect={onColorChange} selected={item.color} />
+      <NumericInput
+        value={quantity}
+        onChange={e => onQuantityChange(parseInt(e.target.value))}
+      />
+      <RemoveIconWrapper onClick={removeItemFromCart}>
+        <FontAwesomeIcon icon={faTrashAlt} size="2x" />
+      </RemoveIconWrapper>
     </CartItemContainer>
   );
 }

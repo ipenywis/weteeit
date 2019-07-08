@@ -45,10 +45,21 @@ const App: React.FC = () => {
     });
   };
 
+  const removeCartItem = (name: string) => {
+    setCart(cartItems => {
+      const filteredCartItems = cartItems.filter(item => {
+        return item.name !== name;
+      });
+      console.warn("Removed Cart Item: ", filteredCartItems);
+      return filteredCartItems;
+    });
+  };
+
   const AppContextValue = {
     cart,
     setCart: setCartWithConstraints,
-    updateCartItem
+    updateCartItem,
+    removeCartItem
   };
 
   return (

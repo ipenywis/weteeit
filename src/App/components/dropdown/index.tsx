@@ -18,6 +18,7 @@ const DropdownContainer = styled.select`
   padding: 14px;
   outline: none;
   margin: 0.6em;
+  background-color: #fff;
 `;
 
 export function Dropdown(props: IDropdownProps) {

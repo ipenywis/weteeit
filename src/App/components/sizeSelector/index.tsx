@@ -66,8 +66,6 @@ export function SizeSelector(props: ISizeSelectorProps) {
 }
 
 export function SizeDropdown(props: Partial<ISizeSelectorProps>) {
-  const { selected } = props;
-
   const onSizeSelect = (
     e: React.ChangeEvent<HTMLSelectElement>,
     size: string

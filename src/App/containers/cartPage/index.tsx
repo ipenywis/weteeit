@@ -8,11 +8,15 @@ import { ShoppingCart } from "./cart";
 export default function CartPage(props: any) {
   return (
     <AppContext.Consumer>
-      {({ cart, updateCartItem }) => (
+      {({ cart, updateCartItem, removeCartItem }) => (
         <PageContainer>
           <HorizontalWrapper width="100%" height="100%">
             <SideNavigation cart={(cart && cart.length) || 0} />
-            <ShoppingCart cart={cart} updateCartItem={updateCartItem} />
+            <ShoppingCart
+              cart={cart}
+              updateCartItem={updateCartItem}
+              removeCartItem={removeCartItem}
+            />
           </HorizontalWrapper>
         </PageContainer>
       )}
