@@ -16,6 +16,7 @@ const CartContainer = styled(VerticalWrapper)`
   height: 100%;
   align-items: flex-start;
   padding: 35px;
+  overflow-y: auto;
 `;
 
 const Title = styled.div`

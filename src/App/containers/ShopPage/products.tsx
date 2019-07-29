@@ -1,17 +1,14 @@
 import React from "react";
 import styled from "styled-components";
 import { VerticalWrapper } from "../../components/verticalWrapper";
-import { IShowcaseItem, FakeShowcaseItems } from "./constants";
-import { Query, QueryResult } from "react-apollo";
-import gql from "graphql-tag";
+import { IShowcaseItem } from "./constants";
 import { GET_PRODUCTS } from "./queries";
-import { GetProducts_products } from "../../typings/graphql-types";
-import { withRouter } from "react-router-dom";
-import { Filters, IFilterItem } from "../../components/filterBar/constants";
-import { FilterBar } from "../../components/filterBar";
-import productsService from "../../services/products.service";
+import { withRouter, match } from "react-router-dom";
 import { Location, History } from "history";
 import { ErrorWrapper } from "../../components/error";
+import { Pagination } from "./pagination";
+import { ApolloClient } from "apollo-boost";
+import { IProduct } from "../../typings/product";
 
 const ProductsContainer = styled.div`
   width: 100%;
@@ -43,13 +40,21 @@ const ShowcaseItem = styled.div`
 `;
 
 export interface IProductsProps {
-  history?: History;
-  location?: Location;
+  history: History;
+  location: Location;
+  client: ApolloClient<any>;
+  match: match;
+  activeProductType: string | null;
+  limitPerPage?: number;
 }
 
 export interface IProductsState {
-  currentActive: string;
   showcaseItems: IShowcaseItem[];
+  errors: string[];
+  isLoading: boolean;
+  products: IProduct[];
+  pagination: any;
+  pageId: number;
 }
 
 class Products extends React.Component<IProductsProps, IProductsState> {
@@ -59,77 +64,162 @@ class Products extends React.Component<IProductsProps, IProductsState> {
     super(props);
 
     this.state = {
-      currentActive: Filters.tshirt.name,
-      showcaseItems: []
+      showcaseItems: [],
+      isLoading: false,
+      errors: [],
+      products: [],
+      pagination: null,
+      pageId: 1
     };
   }
 
-  componentWillMount() {
-    //TODO: Add Server Data Fetching here, fake data is used for now!
-    const fakeShowcaseItems = Object.values(FakeShowcaseItems);
-    this.setState({ showcaseItems: fakeShowcaseItems });
+  getProductTypeFromQuery(): string | null {
+    const queryParams = new URLSearchParams(
+      this.props.location && this.props.location.search
+    );
+    return queryParams.get("type");
   }
 
-  setAsActiveItem(itemKey: string) {
-    this.setState({ currentActive: itemKey || Filters.tshirt.name });
-  }
-
-  onFilterItemClick(itemKey: string, item: IFilterItem) {
-    this.setAsActiveItem(itemKey);
-    //TODO: Support other filter appliers | only supports query for now
-    this.props.history && this.props.history.push(`/shop?type=${item.query}`);
-  }
-
-  showcaseProduct(product: GetProducts_products) {
+  showcaseProduct(product: IProduct) {
     this.props.history && this.props.history.push(`/shop/${product.name}`);
   }
 
-  componentDidMount() {
+  clearErrors() {
+    this.setState({ errors: [] });
+  }
+
+  async fetchProductsWithPagination() {
+    //Clear All Erros Before
+    this.clearErrors();
+
+    const { client, activeProductType, limitPerPage } = this.props;
+    const { pageId } = this.state;
+    let isError = false;
+
+    if (!activeProductType || activeProductType === "") {
+      this.setState({ errors: ["Please Select a Product Type!!"] });
+      return false;
+    }
+
+    const response = await client
+      .query({
+        query: GET_PRODUCTS,
+        variables: {
+          type: activeProductType,
+          pageId: pageId,
+          limitPerPage: limitPerPage || 20
+        }
+      })
+      .catch(err => {
+        isError = true;
+        if (err.graphQLErrors)
+          this.setState({
+            errors: err.graphQLErrors.map((e: any) => {
+              if (typeof e.message === "string") return e.message;
+              else if (typeof e.message === "object")
+                return (e.message as any).message;
+            })
+          });
+        else
+          this.setState({ errors: ["Error Loading Data, Please Try Again!"] });
+      });
+    if (
+      !isError &&
+      (response &&
+        response.data &&
+        response.data.productsWithPagination.products)
+    ) {
+      const productsWithPagination =
+        response && response.data.productsWithPagination;
+      if (productsWithPagination && productsWithPagination.products) {
+        this.setState({
+          products: productsWithPagination.products,
+          pagination: productsWithPagination.pagination
+        });
+      }
+    } else if (!response && !isError) {
+      this.setState({ errors: ["Error Loading Products"] });
+    }
+  }
+
+  async componentWillMount() {
+    //Set Default Page
+    this.setPageIdFromQueryOrDefault();
     //set type by default onmount
-    this.props.history &&
-      this.props.history.replace(`/shop?type=${Filters.tshirt.query}`);
+    await this.fetchProductsWithPagination();
+  }
+
+  async componentDidUpdate(prevProps: IProductsProps) {
+    //Only Run update when type changes
+    if (prevProps.activeProductType !== this.props.activeProductType)
+      await this.fetchProductsWithPagination();
+  }
+
+  private setPageIdFromQueryOrDefault() {
+    const { pagination } = this.state;
+    const queryParams = new URLSearchParams(
+      this.props.location && this.props.location.search
+    );
+    //return queryParams.get("page");
+    const pageId = parseInt(queryParams.get("page") as string);
+    if (pagination && pageId && pageId > 0 && pageId <= pagination.numPages)
+      this.setPageId(pageId);
+    //Default Page id
+    else this.setPageId(1);
+  }
+
+  private setPageId(id: number) {
+    const { location } = this.props;
+    const updatedPath =
+      location.pathname +
+      location.search.replace(/\?page=?.?\d*/, "") +
+      `?page=${id}`;
+    this.props.history.push(updatedPath);
+    this.setState({ pageId: id }, this.fetchProductsWithPagination.bind(this));
+  }
+
+  goNext() {
+    const { pageId, pagination } = this.state;
+    const nextPageId = pageId + 1;
+    if (nextPageId <= pagination.numPages) this.setPageId(nextPageId);
+  }
+
+  goPrevious() {
+    const { pageId, pagination } = this.state;
+    const prevPageId = pageId - 1;
+    if (prevPageId > 0) this.setPageId(prevPageId);
   }
 
   render() {
-    const { currentActive } = this.state;
-    const { location } = this.props;
-    const queryParams = new URLSearchParams(location && location.search);
-    const productType = queryParams.get("type");
+    const { products, pagination, errors } = this.state;
+    let isError = errors && errors.length > 0;
+
     return (
       <ProductsContainer>
         <VerticalWrapper>
-          <FilterBar
-            currentActive={productType as string}
-            onItemClick={this.onFilterItemClick.bind(this)}
-          />
           <ShowcaseContainer>
-            <Query query={GET_PRODUCTS} variables={{ type: productType }}>
-              {(props: QueryResult) => {
-                if (props.loading) return <div>Loading...</div>;
-                if (props.error) {
-                  console.error(props.error);
-                  return (
-                    <ErrorWrapper
-                      message={props.error.graphQLErrors[0].message}
-                    />
-                  );
-                }
-                return props.data.products.map(
-                  (item: GetProducts_products, idx: number) => {
-                    //Store Loaded Products
-                    productsService.addLoadedProduct(item);
-                    return (
-                      <ShowcaseItem
-                        key={`${item.name}-${idx}`}
-                        onClick={() => this.showcaseProduct(item)}
-                      >
-                        <img src={item.imageUrl} alt="" />
-                      </ShowcaseItem>
-                    );
-                  }
+            {!isError &&
+              products.map((item: IProduct, idx: number) => {
+                return (
+                  <ShowcaseItem
+                    key={`${item.name}-${idx}`}
+                    onClick={() => this.showcaseProduct(item)}
+                  >
+                    <img src={item.imageUrl} alt="" />
+                  </ShowcaseItem>
                 );
-              }}
-            </Query>
+              })}
+            {isError &&
+              errors.map(err => {
+                return <ErrorWrapper message={err} />;
+              })}
+            {!isError && (
+              <Pagination
+                {...pagination}
+                onGoNext={this.goNext.bind(this)}
+                onGoPrevious={this.goPrevious.bind(this)}
+              />
+            )}
           </ShowcaseContainer>
         </VerticalWrapper>
       </ProductsContainer>
@@ -137,4 +227,4 @@ class Products extends React.Component<IProductsProps, IProductsState> {
   }
 }
 
-export default withRouter(Products as any);
+export default withRouter<IProductsProps>(Products);

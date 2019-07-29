@@ -11,7 +11,7 @@ import { withRouter, match } from "react-router-dom";
 import { IAppContextProps } from "../../app.context";
 import { Location, History } from "history";
 import { ICartItem } from "../../typings/cart";
-import { GetProducts_products as IProduct } from "../../typings/graphql-types";
+import { IProduct } from "../../typings/product";
 
 export interface IProductInfoProps extends IProduct {
   location: Location;

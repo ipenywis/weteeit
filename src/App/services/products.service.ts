@@ -1,17 +1,17 @@
-import { GetProducts_products } from "../typings/graphql-types";
+import { IProduct } from "../typings/product";
 
 class ProductService {
-  private loadedProducts: GetProducts_products[];
+  private loadedProducts: IProduct[];
 
   constructor() {
     this.loadedProducts = [];
   }
 
-  setLoadedProducts(products: GetProducts_products[]) {
+  setLoadedProducts(products: IProduct[]) {
     this.loadedProducts = products;
   }
 
-  addLoadedProduct(product: GetProducts_products) {
+  addLoadedProduct(product: IProduct) {
     this.loadedProducts && this.loadedProducts.push(product);
   }
 

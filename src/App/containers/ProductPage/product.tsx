@@ -5,7 +5,7 @@ import { VerticalWrapper } from "../../components/verticalWrapper";
 import { FilterBar } from "../../components/filterBar";
 import { Filters, IFilterItem } from "../../components/filterBar/constants";
 import { Query } from "react-apollo";
-import { GetProducts_products as IProduct } from "../../typings/graphql-types";
+import { IProduct } from "../../typings/product";
 import { GET_PRODUCT } from "./queries";
 import ProductInfo from "./productInfo";
 import { ErrorWrapper } from "../../components/error";
@@ -15,7 +15,6 @@ import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { withRouter } from "react-router-dom";
 import { History } from "history";
 import { AppContext, IAppContextProps } from "../../app.context";
-import { ICartItem } from "../../typings/cart";
 
 export interface IProductProps {
   productName: string;
@@ -145,7 +144,6 @@ class Product extends React.Component<IProductProps, IProductState> {
                     {(props: any) => {
                       if (props.loading) return <div>Loading...</div>;
                       if (props.error) {
-                        console.log("Error loading product: ", props.error);
                         return (
                           <ErrorWrapper
                             message={messages.errorLoadingProduct}

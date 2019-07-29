@@ -3,20 +3,23 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: GET_PRODUCT
+// GraphQL query operation: GetProduct
 // ====================================================
 
-export interface GET_PRODUCT_product {
+export interface GetProduct_product {
   __typename: "Product";
   id: number;
   name: string;
+  price: number;
+  type: string;
+  imageUrl: string;
 }
 
-export interface GET_PRODUCT {
-  product: GET_PRODUCT_product;
+export interface GetProduct {
+  product: GetProduct_product;
 }
 
-export interface GET_PRODUCTVariables {
+export interface GetProductVariables {
   name: string;
 }
 
@@ -28,7 +31,7 @@ export interface GET_PRODUCTVariables {
 // GraphQL query operation: GetProducts
 // ====================================================
 
-export interface GetProducts_products {
+export interface GetProducts_productsWithPagination_products {
   __typename: "Product";
   id: number;
   name: string;
@@ -37,8 +40,27 @@ export interface GetProducts_products {
   imageUrl: string;
 }
 
+export interface GetProducts_productsWithPagination_pagination {
+  __typename: "paginationMetaDataClass";
+  pageId: number | null;
+  perPage: number | null;
+  numPages: number | null;
+}
+
+export interface GetProducts_productsWithPagination {
+  __typename: "productWithPagination";
+  products: GetProducts_productsWithPagination_products[];
+  pagination: GetProducts_productsWithPagination_pagination | null;
+}
+
 export interface GetProducts {
-  products: GetProducts_products[];
+  productsWithPagination: GetProducts_productsWithPagination;
+}
+
+export interface GetProductsVariables {
+  type: string;
+  pageId?: number | null;
+  limitPerPage?: number | null;
 }
 
 /* tslint:disable */

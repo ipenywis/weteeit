@@ -106,7 +106,7 @@ export function CartItem(props: ICartItemProps) {
   };
 
   const onQuantityChange = (quantity: number) => {
-    updateCartItem(name, { ...item, quantity });
+    if (quantity >= 1) updateCartItem(name, { ...item, quantity });
   };
 
   const removeItemFromCart = () => {
