@@ -20,6 +20,19 @@ const GlobalStyles = createGlobalStyle`
     color: inherit;
   }
 
+  /* React Portal Container */
+  #portal {
+    height: 100%;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 99;
+  }
+
 `;
 
 export default GlobalStyles;

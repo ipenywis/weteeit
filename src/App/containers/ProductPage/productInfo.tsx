@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import ReactDOM from "react-dom";
 import styled from "styled-components/macro";
 import { VerticalWrapper } from "../../components/verticalWrapper";
 import { Divider } from "../../components/divider";
@@ -12,6 +13,7 @@ import { IAppContextProps } from "../../app.context";
 import { Location, History } from "history";
 import { ICartItem } from "../../typings/cart";
 import { IProduct } from "../../typings/product";
+import { Popup } from "../../components/popup";
 
 export interface IProductInfoProps extends IProduct {
   location: Location;
@@ -64,83 +66,126 @@ const InfoText = styled.div`
   color: rgba(15, 15, 15, 0.4);
 `;
 
-function ProductInfo(props: IProductInfoProps) {
-  const { id, __typename, type, name, price, imageUrl, cart, setCart } = props;
-
-  const currency = "DZD";
-  //Size State
-  const [size, updateSize] = useState("M");
-  //Color State
-  const [color, updateColor] = useState("black");
-  //Quantity State
-  const [quantity, updateQuantity] = useState(1);
-
-  const item: ICartItem = {
-    __typename,
-    id,
-    type,
-    name,
-    price,
-    size,
-    color,
-    quantity,
-    imageUrl
-  };
-
-  const isItemInCart = cart.some(cartItem => {
-    return item.name === cartItem.name;
-  });
-
-  const addToCart = (item: ICartItem) => {
-    setCart(prevCartItems => {
-      return [...prevCartItems, item];
-    });
-  };
-
+function SuccessPopup() {
   return (
-    <ProductInfoContainer>
-      <Name>{name}</Name>
-      <MutedText>By Weteeit</MutedText>
-      <Divider direction="horizontal" />
-      <MutedText>Price</MutedText>
-      <Price>
-        {price} {currency}
-      </Price>
-      <Divider />
-      <MutedText>Sizes</MutedText>
-      <SizeSelector selected={size} onSelect={updateSize} />
-      <Divider />
-      <MutedText>Colors</MutedText>
-      <ColorSelector
-        selected={color}
-        onSelect={colorName => {
-          updateColor(colorName);
-        }}
-      />
-      <Divider />
-      <QuantityContainer width="100%" spaceEvenly>
-        <NumericInput
-          value={quantity}
-          onChange={e =>
-            parseInt(e.target.value) >= 1 &&
-            updateQuantity(parseInt(e.target.value))
-          }
-        />
-        <Button
-          large={true}
-          onClick={() => addToCart(item)}
-          disabled={isItemInCart}
-        >
-          Add to Cart
-        </Button>
-      </QuantityContainer>
-      <InfoContainer>
-        {isItemInCart && (
-          <InfoText>This {item.type} is already in your Cart</InfoText>
-        )}
-      </InfoContainer>
-    </ProductInfoContainer>
+    <Popup isOpen={true}>Item has been successfully added to your cart</Popup>
   );
+}
+
+interface IProductInfoState {
+  size: string;
+  quantity: number;
+  color: string;
+  isPopupOpen: boolean;
+}
+
+class ProductInfo extends React.Component<IProductInfoProps> {
+  state: IProductInfoState;
+
+  constructor(props: IProductInfoProps) {
+    super(props);
+    this.state = {
+      size: "L",
+      color: "black",
+      quantity: 1,
+      isPopupOpen: false
+    };
+  }
+
+  toggleSuccessPopup(callback?: () => void) {
+    this.setState({ isPopupOpen: true });
+    //Hide Popup in 2s
+    setTimeout(() => this.setState({ isPopupOpen: false }, callback), 2000);
+  }
+
+  addToCart(item: ICartItem) {
+    this.toggleSuccessPopup(() =>
+      this.props.setCart(prevCartItems => {
+        return [...prevCartItems, item];
+      })
+    );
+  }
+
+  updateSize(size: string) {
+    this.setState({ size });
+  }
+
+  updateQuantity(quantity: number) {
+    this.setState({ quantity });
+  }
+
+  updateColor(color: string) {
+    this.setState({ color });
+  }
+
+  render() {
+    const { id, __typename, type, name, price, imageUrl, cart } = this.props;
+    const { size, color, quantity, isPopupOpen } = this.state;
+
+    const item: ICartItem = {
+      __typename,
+      id,
+      type,
+      name,
+      price,
+      size,
+      color,
+      quantity,
+      imageUrl
+    };
+
+    const currency = "DZD";
+
+    const isItemInCart = cart.some(cartItem => {
+      return item.name === cartItem.name;
+    });
+
+    return (
+      <ProductInfoContainer>
+        <Name>{name}</Name>
+        <MutedText>By Weteeit</MutedText>
+        <Divider direction="horizontal" />
+        <MutedText>Price</MutedText>
+        <Price>
+          {price} {currency}
+        </Price>
+        <Divider />
+        <MutedText>Sizes</MutedText>
+        <SizeSelector selected={size} onSelect={this.updateSize.bind(this)} />
+        <Divider />
+        <MutedText>Colors</MutedText>
+        <ColorSelector
+          selected={color}
+          onSelect={colorName => {
+            this.updateColor(colorName);
+          }}
+        />
+        <Divider />
+        <QuantityContainer width="100%" spaceEvenly>
+          <NumericInput
+            value={quantity}
+            onChange={e =>
+              parseInt(e.target.value) >= 1 &&
+              this.updateQuantity(parseInt(e.target.value))
+            }
+          />
+          <Button
+            large={true}
+            onClick={() => this.addToCart(item)}
+            disabled={isItemInCart}
+          >
+            Add to Cart
+          </Button>
+        </QuantityContainer>
+        <InfoContainer>
+          {isItemInCart && (
+            <InfoText>This {item.type} is already in your Cart</InfoText>
+          )}
+        </InfoContainer>
+        {isPopupOpen && <SuccessPopup />}
+      </ProductInfoContainer>
+    );
+  }
 }
 
 export default withRouter<IProductInfoProps>(ProductInfo);

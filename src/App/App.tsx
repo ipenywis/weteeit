@@ -62,6 +62,13 @@ const App: React.FC = () => {
     removeCartItem
   };
 
+  //Create Popup Portal Container
+  /*if (!document.getElementById("portal")) {
+    const portalContainer = document.createElement("div");
+    portalContainer.setAttribute("id", "portal");
+    document.body.appendChild(portalContainer);
+  }*/
+
   return (
     <ApolloProvider client={client}>
       <AppContext.Provider value={AppContextValue}>
