@@ -84,13 +84,17 @@ export class Pagination extends React.Component<IPaginationProps> {
     const isNextActive = pageId + 1 <= numPages;
 
     const onPreviousClick = () => {
-      this.setState({ count: count - perPage });
-      this.props.onGoPrevious();
+      if (isPreviousActive) {
+        this.setState({ count: count - perPage });
+        this.props.onGoPrevious();
+      }
     };
 
     const onNextClick = () => {
-      this.setState({ count: count + perPage });
-      this.props.onGoNext();
+      if (isNextActive) {
+        this.setState({ count: count + perPage });
+        this.props.onGoNext();
+      }
     };
 
     return (

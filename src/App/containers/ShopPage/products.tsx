@@ -123,7 +123,9 @@ class Products extends React.Component<IProductsProps, IProductsState> {
         else
           this.setState({ errors: ["Error Loading Data, Please Try Again!"] });
       });
-    if (
+    if (!isError && response && response.loading)
+      this.setState({ isLoading: response.loading });
+    else if (
       !isError &&
       (response &&
         response.data &&
@@ -185,7 +187,7 @@ class Products extends React.Component<IProductsProps, IProductsState> {
   }
 
   goPrevious() {
-    const { pageId, pagination } = this.state;
+    const { pageId } = this.state;
     const prevPageId = pageId - 1;
     if (prevPageId > 0) this.setPageId(prevPageId);
   }
