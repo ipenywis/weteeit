@@ -18,6 +18,7 @@ export const GET_PRODUCTS = gql`
         pageId
         perPage
         numPages
+        count
       }
     }
   }

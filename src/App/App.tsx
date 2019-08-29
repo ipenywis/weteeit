@@ -10,6 +10,8 @@ import ApolloClient from "apollo-boost";
 import { AppContext } from "./app.context";
 import { ICartItem } from "./typings/cart";
 import CartPage from "./containers/cartPage";
+import OrderPage from "./containers/orderPage";
+import { PrivateRoute } from "./components/privateRoute";
 
 const App: React.FC = () => {
   //Apollo GraphQL Client
@@ -18,6 +20,8 @@ const App: React.FC = () => {
   });
 
   const [cart, setCart] = useState<ICartItem[]>([]);
+  const [canOrder, setCanOrder] = useState(false);
+  const [instructions, setInstructions] = useState<string | null>(null);
 
   const setCartWithConstraints = (
     callback: (prevValue: ICartItem[]) => ICartItem[]
@@ -40,7 +44,6 @@ const App: React.FC = () => {
         if (item.name === name) return newItem;
         return item;
       });
-      console.warn("Updated Cart Items: ", updatedCartItems);
       return updatedCartItems;
     });
   };
@@ -50,7 +53,6 @@ const App: React.FC = () => {
       const filteredCartItems = cartItems.filter(item => {
         return item.name !== name;
       });
-      console.warn("Removed Cart Item: ", filteredCartItems);
       return filteredCartItems;
     });
   };
@@ -59,15 +61,12 @@ const App: React.FC = () => {
     cart,
     setCart: setCartWithConstraints,
     updateCartItem,
-    removeCartItem
+    removeCartItem,
+    setCanOrder,
+    setInstructions,
+    instructions,
+    canOrder
   };
-
-  //Create Popup Portal Container
-  /*if (!document.getElementById("portal")) {
-    const portalContainer = document.createElement("div");
-    portalContainer.setAttribute("id", "portal");
-    document.body.appendChild(portalContainer);
-  }*/
 
   return (
     <ApolloProvider client={client}>
@@ -80,6 +79,13 @@ const App: React.FC = () => {
               <Route exact path="/shop" component={ShopPage} />
               <Route exact path="/shop/:name" component={ProductPage} />
               <Route exact path="/cart" component={CartPage} />
+              <PrivateRoute
+                exact
+                allowAccess={canOrder}
+                redirectTo="/shop"
+                path="/order"
+                component={OrderPage}
+              />
             </Switch>
           </Router>
         </div>

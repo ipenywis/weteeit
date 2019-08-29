@@ -1,15 +1,19 @@
 import React from "react";
 import styled from "styled-components/macro";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCheckCircle,
+  IconDefinition
+} from "@fortawesome/free-solid-svg-icons";
 
 export interface IPopupProps {
   children: any | any[];
   isOpen: boolean;
+  icon?: IconDefinition;
 }
 
 const PopupContainer = styled.div`
-  position: absolute;
+  position: fixed;
   width: 100%;
   height: 100%;
   top: 0;
@@ -47,7 +51,7 @@ const Content = styled.div`
 `;
 
 export function Popup(props: IPopupProps) {
-  const { isOpen } = props;
+  const { isOpen, icon } = props;
 
   if (!isOpen) return null;
 
@@ -55,7 +59,7 @@ export function Popup(props: IPopupProps) {
     <PopupContainer>
       <PopupInnerContainer>
         <IconContainer>
-          <FontAwesomeIcon icon={faCheckCircle} size="6x" />
+          <FontAwesomeIcon icon={icon || faCheckCircle} size="6x" />
         </IconContainer>
         <Content>{props.children}</Content>
       </PopupInnerContainer>

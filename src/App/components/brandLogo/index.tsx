@@ -1,17 +1,18 @@
 import React from "react";
 import styled from "styled-components/macro";
-import Logo from "../../../assets/images/logo.png";
+import Logo from "../../../assets/images/logo.svg";
+import ReactSVG from "react-svg";
 
 export interface IBrandLogoProps {
   diagnol?: boolean;
   style?: React.CSSProperties;
   size?: "xs" | "s" | "lg" | "xl" | "xxl";
+  color?: "black" | "white";
 }
 const BrandLogoContainer = styled.div`
-  color: #fff;
   /*width: 7.5em;
   height: 3em;*/
-  transform: ${(props: IBrandLogoProps) => props.diagnol && "rotate(-5deg)"};
+  transform: ${(props: IBrandLogoProps) => props.diagnol && "rotate(-1deg)"};
 
   width: ${(props: IBrandLogoProps) => {
     let width = "7.5em";
@@ -36,23 +37,27 @@ const BrandLogoContainer = styled.div`
     return width;
   }};
 
-  img {
+  svg {
     width: 100%;
     height: 100%;
+    * {
+      fill: ${props => props.color};
+    }
   }
 `;
 
 function BrandLogo(props: IBrandLogoProps) {
   return (
     <BrandLogoContainer {...props}>
-      <img src={Logo} alt="" />
+      <ReactSVG src={Logo} />
     </BrandLogoContainer>
   );
 }
 
 //Default Props
 BrandLogo.defaultProps = {
-  size: "s"
+  size: "s",
+  color: "white"
 };
 
 export { BrandLogo };

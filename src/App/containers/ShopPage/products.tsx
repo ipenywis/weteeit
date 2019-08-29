@@ -9,6 +9,7 @@ import { ErrorWrapper } from "../../components/error";
 import { Pagination } from "./pagination";
 import { ApolloClient } from "apollo-boost";
 import { IProduct } from "../../typings/product";
+import { IPagination } from "../../typings/pagination";
 
 const ProductsContainer = styled.div`
   width: 100%;
@@ -53,7 +54,7 @@ export interface IProductsState {
   errors: string[];
   isLoading: boolean;
   products: IProduct[];
-  pagination: any;
+  pagination: IPagination | null;
   pageId: number;
 }
 
@@ -101,6 +102,8 @@ class Products extends React.Component<IProductsProps, IProductsState> {
       return false;
     }
 
+    console.log("Product Type: ", activeProductType);
+
     const response = await client
       .query({
         query: GET_PRODUCTS,
@@ -123,6 +126,7 @@ class Products extends React.Component<IProductsProps, IProductsState> {
         else
           this.setState({ errors: ["Error Loading Data, Please Try Again!"] });
       });
+
     if (!isError && response && response.loading)
       this.setState({ isLoading: response.loading });
     else if (
@@ -147,7 +151,6 @@ class Products extends React.Component<IProductsProps, IProductsState> {
   async componentWillMount() {
     //Set Default Page
     this.setPageIdFromQueryOrDefault();
-    //set type by default onmount
     await this.fetchProductsWithPagination();
   }
 
@@ -164,7 +167,13 @@ class Products extends React.Component<IProductsProps, IProductsState> {
     );
     //return queryParams.get("page");
     const pageId = parseInt(queryParams.get("page") as string);
-    if (pagination && pageId && pageId > 0 && pageId <= pagination.numPages)
+    if (
+      pagination &&
+      pagination.numPages &&
+      pageId &&
+      pageId > 0 &&
+      pageId <= pagination.numPages
+    )
       this.setPageId(pageId);
     //Default Page id
     else this.setPageId(1);
@@ -183,7 +192,8 @@ class Products extends React.Component<IProductsProps, IProductsState> {
   goNext() {
     const { pageId, pagination } = this.state;
     const nextPageId = pageId + 1;
-    if (nextPageId <= pagination.numPages) this.setPageId(nextPageId);
+    if (pagination && pagination.numPages && nextPageId <= pagination.numPages)
+      this.setPageId(nextPageId);
   }
 
   goPrevious() {
@@ -193,14 +203,15 @@ class Products extends React.Component<IProductsProps, IProductsState> {
   }
 
   render() {
-    const { products, pagination, errors } = this.state;
+    const { products, pagination, errors, isLoading } = this.state;
     let isError = errors && errors.length > 0;
 
     return (
       <ProductsContainer>
         <VerticalWrapper>
           <ShowcaseContainer>
-            {!isError &&
+            {!isLoading &&
+              !isError &&
               products.map((item: IProduct, idx: number) => {
                 return (
                   <ShowcaseItem
@@ -211,13 +222,17 @@ class Products extends React.Component<IProductsProps, IProductsState> {
                   </ShowcaseItem>
                 );
               })}
-            {isError &&
+            {!isLoading &&
+              isError &&
               errors.map(err => {
                 return <ErrorWrapper message={err} />;
               })}
-            {!isError && (
+            {!isLoading && !isError && (
               <Pagination
-                {...pagination}
+                numProducts={pagination && pagination.count}
+                pageId={pagination && pagination.pageId}
+                perPage={pagination && pagination.perPage}
+                numPages={pagination && pagination.numPages}
                 onGoNext={this.goNext.bind(this)}
                 onGoPrevious={this.goPrevious.bind(this)}
               />

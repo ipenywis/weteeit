@@ -13,9 +13,9 @@ export const Filters: IFilters = {
     name: "Tshirts",
     query: "tshirt"
   },
-  sweatshirt: {
-    name: "Sweatshirts",
-    query: "sweatshirt"
+  sweetshirt: {
+    name: "Sweetshirts",
+    query: "sweetshirt"
   },
   hoodie: {
     name: "Hoodies",

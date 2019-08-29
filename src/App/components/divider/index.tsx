@@ -3,10 +3,12 @@ import styled from "styled-components";
 
 export interface IDividerProps {
   direction?: "vertical" | "horizontal";
+  lightColor?: boolean;
 }
 
 const DividerContainer = styled.div`
-  background-color: #79787857;
+  background-color: ${({ lightColor }: IDividerProps) =>
+    lightColor ? "#79787821" : "#79787857"};
   width: ${(props: IDividerProps) =>
     props.direction === "horizontal" ? "100%" : "2px"};
   height: ${(props: IDividerProps) =>

@@ -7,9 +7,10 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 export interface IPaginationProps {
-  pageId: number;
-  numPages: number;
-  perPage: number;
+  pageId: number | null;
+  numPages: number | null;
+  perPage: number | null;
+  numProducts: number | null;
 
   onGoNext: () => void;
   onGoPrevious: () => void;
@@ -64,6 +65,7 @@ const PageInfo = styled.div`
 
 interface IPaginationState {
   count: number;
+  isNextLastPage: boolean;
 }
 
 export class Pagination extends React.Component<IPaginationProps> {
@@ -72,27 +74,38 @@ export class Pagination extends React.Component<IPaginationProps> {
   constructor(props: IPaginationProps) {
     super(props);
     this.state = {
-      count: 0
+      count: 0,
+      isNextLastPage: false
     };
   }
 
   render() {
-    const { numPages, perPage, pageId } = this.props;
-    const { count } = this.state;
-    const numProducts = numPages && perPage ? perPage * numPages : 0;
-    const isPreviousActive = pageId - 1 > 0;
-    const isNextActive = pageId + 1 <= numPages;
+    const { numPages, perPage, pageId, numProducts } = this.props;
+    const { count, isNextLastPage } = this.state;
+    const isPreviousActive = pageId ? pageId - 1 > 0 : false;
+    const isNextActive = pageId && numPages ? pageId + 1 <= numPages : false;
+    const perPageItems =
+      perPage && numProducts && perPage > numProducts ? numProducts : perPage;
 
     const onPreviousClick = () => {
-      if (isPreviousActive) {
-        this.setState({ count: count - perPage });
+      if (isPreviousActive && perPage) {
+        this.setState({ count: count - perPage, isNextLastPage: false });
         this.props.onGoPrevious();
       }
     };
 
     const onNextClick = () => {
-      if (isNextActive) {
-        this.setState({ count: count + perPage });
+      if (isNextActive && perPageItems) {
+        //Check if it is the last page
+        if (numProducts && pageId && pageId + 1 === numPages) {
+          this.setState((prevState: IPaginationState) => ({
+            count: prevState.count + perPageItems,
+            isNextLastPage: true
+          }));
+        } else
+          this.setState((prevState: IPaginationState) => ({
+            count: prevState.count + perPageItems
+          }));
         this.props.onGoNext();
       }
     };
@@ -105,8 +118,9 @@ export class Pagination extends React.Component<IPaginationProps> {
             <div>Previous</div>
           </Navigator>
           <PageInfo>
-            Showing {count === 0 ? 1 : count}-{count + perPage} of {numProducts}{" "}
-            awesome products
+            Showing {count === 0 ? 1 : count}-
+            {isNextLastPage ? numProducts : count + (perPageItems as number)} of{" "}
+            {numProducts} awesome products
           </PageInfo>
           <Navigator active={isNextActive} onClick={onNextClick}>
             <div>Next</div>

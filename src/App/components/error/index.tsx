@@ -3,26 +3,28 @@ import styled from "styled-components";
 
 export interface IErrorProps {
   message: string | any;
+  small?: boolean;
 }
 
 export const ErrorContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
-  height: 100%;
+  width: ${({ small }: IErrorProps) => (small ? "" : "100%")};
+  height: ${({ small }: IErrorProps) => (small ? "" : "100%")};
   justify-content: center;
   align-items: center;
-  margin-top: 21px;
+  margin-top: ${({ small }: IErrorProps) => (small ? "19px" : "21px")};
+  margin-bottom: 10px;
 `;
 
 const ErrorText = styled.div`
-  font-size: 28px;
+  font-size: ${({ small }: IErrorProps) => (small ? "25px" : "28px")};
   color: #e74c3c;
   font-weight: bold;
-  margin-bottom: 25px;
+  margin-bottom: ${({ small }: IErrorProps) => (small ? "10px" : "25px")};
 `;
 const ErrorMessage = styled.div`
-  font-size: 23px;
+  font-size: ${({ small }: IErrorProps) => (small ? "19px" : "23px")};
   color: #d3d3d3;
   font-weight: lighter;
 `;
@@ -37,9 +39,9 @@ export function ErrorWrapper(props: IErrorProps) {
   }
 
   return (
-    <ErrorContainer>
-      <ErrorText>Error !</ErrorText>
-      <ErrorMessage>{message}</ErrorMessage>
+    <ErrorContainer {...props}>
+      <ErrorText {...props}>Error !</ErrorText>
+      <ErrorMessage {...props}>{message}</ErrorMessage>
     </ErrorContainer>
   );
 }

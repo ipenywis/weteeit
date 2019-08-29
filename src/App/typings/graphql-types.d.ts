@@ -3,6 +3,80 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL mutation operation: StoreOrder
+// ====================================================
+
+export interface StoreOrder_order_products_orderProduct {
+  __typename: "OrderProduct";
+  product: number;
+  order: number;
+  quantity: number;
+}
+
+export interface StoreOrder_order_products {
+  __typename: "Product";
+  name: string;
+  type: string;
+  price: number;
+  imageUrl: string;
+  orderProduct: StoreOrder_order_products_orderProduct[] | null;
+}
+
+export interface StoreOrder_order {
+  __typename: "Order";
+  id: number;
+  transactionId: string;
+  firstName: string;
+  lastName: string;
+  address: string;
+  phone: string;
+  email: string;
+  facebook_profile: string | null;
+  wilaya: string;
+  city: string;
+  products: StoreOrder_order_products[];
+}
+
+export interface StoreOrder {
+  order: StoreOrder_order | null;
+}
+
+export interface StoreOrderVariables {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  address: string;
+  facebook_profile: string;
+  wilaya: string;
+  city: string;
+  products: OrderProductInput[];
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL query operation: GetShipping
+// ====================================================
+
+export interface GetShipping_shippings {
+  __typename: "shipping";
+  id: number;
+  wilaya: string;
+  price: number;
+}
+
+export interface GetShipping {
+  shippings: GetShipping_shippings[];
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL query operation: GetProduct
 // ====================================================
 
@@ -45,6 +119,7 @@ export interface GetProducts_productsWithPagination_pagination {
   pageId: number | null;
   perPage: number | null;
   numPages: number | null;
+  count: number | null;
 }
 
 export interface GetProducts_productsWithPagination {
@@ -70,6 +145,11 @@ export interface GetProductsVariables {
 //==============================================================
 // START Enums and Input Objects
 //==============================================================
+
+export interface OrderProductInput {
+  name: string;
+  quantity: number;
+}
 
 //==============================================================
 // END Enums and Input Objects

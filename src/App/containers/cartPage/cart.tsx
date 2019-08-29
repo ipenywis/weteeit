@@ -6,11 +6,16 @@ import { CartItem } from "../../components/cartItem";
 import { IAppContextProps } from "../../app.context";
 import { HorizontalWrapper } from "../../components/horizontalWrapper";
 import { Button } from "../../components/button";
+import { withRouter } from "react-router";
+import { IWithRouterProps } from "../../typings/common";
 
-export interface ICartProps {
+export interface ICartProps extends IWithRouterProps {
   cart: ICartItem[];
+  instructions: IAppContextProps["instructions"];
   updateCartItem: IAppContextProps["updateCartItem"];
   removeCartItem: IAppContextProps["removeCartItem"];
+  setCanOrder: IAppContextProps["setCanOrder"];
+  setInstructions: IAppContextProps["setInstructions"];
 }
 
 const CartContainer = styled(VerticalWrapper)`
@@ -46,7 +51,7 @@ const CartIsEmptyWarning = styled(VerticalWrapper)`
 
 const TextArea = styled.textarea`
   width: 100%;
-  height: 8em;
+  min-height: 8em;
   resize: none;
   padding: 15px;
   color: #3d3d3d;
@@ -78,22 +83,13 @@ const CheckoutButton = styled(Button)`
   font-weight: 800;
 `;
 
-interface ICartState {
-  sellerInstructions: string;
-}
-
-export class ShoppingCart extends React.Component<ICartProps> {
-  state: ICartState;
-
+class ShoppingCart extends React.Component<ICartProps> {
   constructor(props: ICartProps) {
     super(props);
-    this.state = {
-      sellerInstructions: ""
-    };
   }
 
   onInstructionsChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
-    this.setState({ sellerInstructions: e.target.value });
+    this.props.setInstructions(e.target.value);
   }
 
   calculateCartTotal() {
@@ -105,8 +101,13 @@ export class ShoppingCart extends React.Component<ICartProps> {
     return total;
   }
 
+  private checkout() {
+    this.props.setCanOrder(true);
+    this.props.history.push("/order");
+  }
+
   render() {
-    const { cart, updateCartItem, removeCartItem } = this.props;
+    const { cart, updateCartItem, removeCartItem, instructions } = this.props;
 
     const isCartEmpty = cart.length === 0;
     const currency = "DZD";
@@ -132,6 +133,7 @@ export class ShoppingCart extends React.Component<ICartProps> {
         )}
         {!isCartEmpty && (
           <TextArea
+            value={instructions || undefined}
             placeholder="Instructions for the seller..."
             onChange={this.onInstructionsChange.bind(this)}
           />
@@ -145,10 +147,14 @@ export class ShoppingCart extends React.Component<ICartProps> {
                 {currency}
               </Total>
             )}
-            <CheckoutButton large>Check out</CheckoutButton>
+            <CheckoutButton large onClick={this.checkout.bind(this)}>
+              Check out
+            </CheckoutButton>
           </FooterContainer>
         )}
       </CartContainer>
     );
   }
 }
+
+export default withRouter<ICartProps>(ShoppingCart);
