@@ -7,7 +7,8 @@ import { IShipping } from "../../typings/shipping";
 import { VerticalWrapper } from "../../components/verticalWrapper";
 
 export interface IWilayaSelectProps {
-  value?: string;
+  wilaya?: string;
+  shippingPrice?: number | null;
   error?: string;
 
   onSelect?: (wilaya: string) => void;
@@ -58,9 +59,9 @@ export default function WilayaSelect(props: IWilayaSelectProps) {
     <Wrapper>
       <WilayaSelectContainer
         value={
-          props.value === "" || props.value === null
+          props.wilaya === "" || props.wilaya === null || !props.shippingPrice
             ? defaultValue
-            : props.value
+            : `${props.wilaya}(${props.shippingPrice})`
         }
         onChange={e =>
           props.onSelect &&

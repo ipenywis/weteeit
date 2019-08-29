@@ -8,6 +8,7 @@ import { Search } from "../search";
 import { VerticalWrapper } from "../verticalWrapper";
 import { Link } from "react-router-dom";
 import { Social } from "../social";
+import { DEVELOPER_LINK } from "./constants";
 
 const SideNavContainer = styled.div`
   width: 17%;
@@ -77,6 +78,17 @@ const Copyright = styled(Link)`
   color: #a5a5a5;
 `;
 
+const DevelopedBy = styled.a`
+  font-size: 13px;
+  font-weight: 500;
+  color: #a5a5a5;
+  transition: all 250ms ease-in-out;
+
+  &:hover {
+    color: #fff;
+  }
+`;
+
 export interface ISideNavigationProps {
   cart?: number;
 }
@@ -101,6 +113,9 @@ export function SideNavigation(props: ISideNavigationProps) {
         <BottomSection>
           <Social />
           <Copyright to="/about">Copyright @ 2019 Weteeit</Copyright>
+          <DevelopedBy href={DEVELOPER_LINK}>
+            Developed By IslemPenywis
+          </DevelopedBy>
         </BottomSection>
       </InnerContainer>
       <BottomNotch />

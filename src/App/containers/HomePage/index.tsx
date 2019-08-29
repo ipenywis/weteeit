@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components/macro";
 import { PageContainer } from "../../components/pageContainer";
 import { BorderButton } from "../../components/borderButton";
@@ -7,6 +7,7 @@ import { BrandLogo } from "../../components/brandLogo";
 import BackgroundImage from "../../../assets/images/home_background.png";
 import { HorizontalWrapper } from "../../components/horizontalWrapper";
 import { Social } from "../../components/social";
+import ReactTooltip from "react-tooltip";
 
 const HomePageContainer = styled.div`
   width: 100%;
@@ -29,23 +30,38 @@ const CustomBorderButton = styled(BorderButton)`
   font-size: 30px;
 `;
 
-export default class HomePage extends React.Component {
-  render() {
-    return (
-      <PageContainer>
-        <HomePageContainer>
-          <BrandLogo size="xxl" style={{ marginTop: "4.5em" }} />
-          <HorizontalWrapper>
-            <CustomBorderButton large={true} uppercase={true} to="/shop">
-              Shop
-            </CustomBorderButton>
-            <CustomBorderButton large={true} uppercase={true}>
-              Submit Your Design
-            </CustomBorderButton>
-          </HorizontalWrapper>
-          <Social />
-        </HomePageContainer>
-      </PageContainer>
-    );
-  }
+export default function HomePage(props: any) {
+  const [isPopupOpen, setPopup] = useState(false);
+
+  return (
+    <PageContainer>
+      <HomePageContainer>
+        <BrandLogo size="xxl" style={{ marginTop: "4.5em" }} />
+        <HorizontalWrapper>
+          <CustomBorderButton large={true} uppercase={true} to="/shop">
+            Shop
+          </CustomBorderButton>
+          <CustomBorderButton
+            large={true}
+            uppercase={true}
+            disabled={false}
+            data-tip
+            data-for="submit-design"
+          >
+            Submit Your Design
+          </CustomBorderButton>
+          <ReactTooltip
+            id="submit-design"
+            className="react-tooltip"
+            effect="solid"
+            type="light"
+            place="top"
+          >
+            Coming Soon!
+          </ReactTooltip>
+        </HorizontalWrapper>
+        <Social />
+      </HomePageContainer>
+    </PageContainer>
+  );
 }

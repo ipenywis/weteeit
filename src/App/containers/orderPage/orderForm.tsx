@@ -26,12 +26,15 @@ import { Divider } from "../../components/divider";
 import { VerticalWrapper } from "../../components/verticalWrapper";
 import { InputFields } from "./constants";
 import { Popup } from "../../components/popup";
+import { parseWilayaShipping } from "../../../utils/common";
 
 export interface IOrderFormProps extends IWithRouterProps {
   client: ApolloClient<any>;
   cart: IAppContextProps["cart"];
   instructions: IAppContextProps["instructions"];
   setCart: IAppContextProps["setCart"];
+  shippingPrice: number | null;
+  setShippingPrice: (price: number | null) => void;
 }
 
 const OrderFormContainer = styled.div`
@@ -231,7 +234,6 @@ class OrderForm extends React.Component<IOrderFormProps> {
   }
 
   private serverSideValidation(error: ApolloError) {
-    console.log("Error: ", JSON.stringify(error.graphQLErrors));
     const errors = error.graphQLErrors;
     for (const err of errors) {
       if (
@@ -466,9 +468,14 @@ class OrderForm extends React.Component<IOrderFormProps> {
             />
             <InlineInputGroup>
               <WilayaSelect
-                value={wilaya}
+                wilaya={wilaya}
+                shippingPrice={this.props.shippingPrice}
                 error={errors.wilaya}
-                onSelect={val => this.onInputChange("wilaya", val)}
+                onSelect={val => {
+                  const [wilayaName, price] = parseWilayaShipping(val);
+                  this.props.setShippingPrice(price);
+                  this.onInputChange("wilaya", wilayaName);
+                }}
               />
               <Input
                 placeholder="City"

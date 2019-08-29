@@ -36,7 +36,7 @@ export function Social(props: ISocialProps) {
     <SocialContainer>
       {socialMediaVals.map(({ link, icon }, idx) => {
         return (
-          <SocialIcon key={`${link}-${idx}`} href={link}>
+          <SocialIcon key={`${link}-${idx}`} href={link} target="_blank">
             <FontAwesomeIcon icon={icon} size="sm" />
           </SocialIcon>
         );

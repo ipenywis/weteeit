@@ -6,6 +6,7 @@ export interface IBorderButtonProps {
   large?: boolean;
   uppercase?: boolean;
   to?: string;
+  disabled?: boolean;
   children?: any;
 }
 
@@ -29,6 +30,12 @@ export const ButtonContainer = styled.button`
   &:hover {
     background-color: #fff;
     color: #000;
+  }
+
+  &:disabled {
+    background-color: #a2a2a2;
+    color: #fff;
+    cursor: not-allowed;
   }
 `;
 

@@ -17,7 +17,7 @@ export interface ISocialMedia {
 
 export const socialMedia: ISocialMedia = {
   facebook: {
-    link: "",
+    link: "https://fb.com/weteeit",
     icon: faFacebookF
   },
   twitter: {
@@ -25,7 +25,7 @@ export const socialMedia: ISocialMedia = {
     icon: faTwitter
   },
   instagram: {
-    link: "",
+    link: "https://instagram.com/weteeit",
     icon: faInstagram
   },
   pinterest: {

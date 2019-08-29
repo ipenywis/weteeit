@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { PageContainer } from "../../components/pageContainer";
 import { HorizontalWrapper } from "../../components/horizontalWrapper";
 import { SideNavigation } from "../../components/sideNavigation";
@@ -14,6 +14,10 @@ const StyledPageContainer = styled(PageContainer)`
 `;
 
 export default function OrderPage(props: any) {
+  const [shipping, setShipping] = useState<number | null>(null);
+  //Default shipping price
+  let shippingPrice = 300;
+
   return (
     <ApolloConsumer>
       {client => (
@@ -27,8 +31,10 @@ export default function OrderPage(props: any) {
                     cart={cart}
                     instructions={instructions}
                     setCart={setCart}
+                    shippingPrice={shipping}
+                    setShippingPrice={setShipping}
                   />
-                  <OrderInfo cart={cart} />
+                  <OrderInfo cart={cart} shippingPrice={shipping} />
                 </HorizontalWrapper>
               </HorizontalWrapper>
             </StyledPageContainer>

@@ -21,3 +21,5 @@ export const menu: IMenu = {
     path: "/about"
   }
 };
+
+export const DEVELOPER_LINK = "https://github.com/ipenywis";

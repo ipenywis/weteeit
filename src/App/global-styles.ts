@@ -89,6 +89,13 @@ const GlobalStyles = createGlobalStyle`
   }
 }
 
+/* ReactTooltip custom style */
+.react-tooltip {
+  font-size: 20px;
+  font-weight: 700;
+  background-color: #fff;
+}
+
 `;
 
 export default GlobalStyles;

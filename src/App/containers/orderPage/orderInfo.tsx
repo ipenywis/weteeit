@@ -7,6 +7,7 @@ import { HorizontalWrapper } from "../../components/horizontalWrapper";
 
 export interface IOrderInfo {
   cart: IAppContextProps["cart"];
+  shippingPrice: number | null;
 }
 
 const StyledVerticalWrapper = styled(VerticalWrapper)`
@@ -84,7 +85,7 @@ const SpacedWrapper = styled(HorizontalWrapper)`
 `;
 
 export default function OrderInfo(props: IOrderInfo) {
-  const { cart } = props;
+  const { cart, shippingPrice } = props;
 
   //Calculate Subtotal
   let subtotal = 0;
@@ -92,11 +93,11 @@ export default function OrderInfo(props: IOrderInfo) {
     subtotal += item.price;
   }
 
-  const shipping = 500;
+  const shipping = shippingPrice || "Select Wilaya";
 
   //Calculate Total
   //TODO: Add Shipping to AppContext
-  const total = subtotal + shipping;
+  const total = typeof shipping === "string" ? shipping : subtotal + shipping;
 
   return (
     <OrderInfoContainer>
@@ -131,14 +132,18 @@ export default function OrderInfo(props: IOrderInfo) {
           </SpacedWrapper>
           <SpacedWrapper>
             <SmallText thik>Shipping</SmallText>
-            <SmallMutedText thik>{shipping} DZD</SmallMutedText>
+            <SmallMutedText thik>
+              {typeof shipping === "string" ? shipping : shipping + " DZD"}
+            </SmallMutedText>
           </SpacedWrapper>
         </VerticalWrapper>
         <Divider direction="horizontal" lightColor />
         <VerticalWrapper>
           <SpacedWrapper>
             <MediumText thik>TOTAL:</MediumText>
-            <MediumMutedText thik>{total} DZD</MediumMutedText>
+            <MediumMutedText thik>
+              {typeof total === "string" ? total : total + " DZD"}
+            </MediumMutedText>
           </SpacedWrapper>
         </VerticalWrapper>
       </InnerContainer>
