@@ -22,7 +22,7 @@ const SearchContainer = styled.div`
 
 export function Search(props: ISearchProps) {
   return (
-    <SearchContainer>
+    <SearchContainer {...props}>
       <img src={SearchIcon} alt="" />
     </SearchContainer>
   );

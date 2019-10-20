@@ -8,6 +8,20 @@ import BackgroundImage from "../../../assets/images/home_background.png";
 import { HorizontalWrapper } from "../../components/horizontalWrapper";
 import { Social } from "../../components/social";
 import ReactTooltip from "react-tooltip";
+import { DEVELOPER_LINK } from "../../components/sideNavigation/constants";
+import { VerticalWrapper } from "../../components/verticalWrapper";
+
+const DevelopedBy = styled.a`
+  font-size: 13px;
+  font-weight: 500;
+  color: #a5a5a5;
+  transition: all 250ms ease-in-out;
+  margin-top: 4px;
+
+  &:hover {
+    color: #fff;
+  }
+`;
 
 const HomePageContainer = styled.div`
   width: 100%;
@@ -60,7 +74,12 @@ export default function HomePage(props: any) {
             Coming Soon!
           </ReactTooltip>
         </HorizontalWrapper>
-        <Social />
+        <VerticalWrapper>
+          <Social />
+          <DevelopedBy href={DEVELOPER_LINK}>
+            Developed By IslemPenywis
+          </DevelopedBy>
+        </VerticalWrapper>
       </HomePageContainer>
     </PageContainer>
   );

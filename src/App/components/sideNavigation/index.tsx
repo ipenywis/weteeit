@@ -9,6 +9,7 @@ import { VerticalWrapper } from "../verticalWrapper";
 import { Link } from "react-router-dom";
 import { Social } from "../social";
 import { DEVELOPER_LINK } from "./constants";
+import ReactTooltip from "react-tooltip";
 
 const SideNavContainer = styled.div`
   width: 17%;
@@ -83,6 +84,7 @@ const DevelopedBy = styled.a`
   font-weight: 500;
   color: #a5a5a5;
   transition: all 250ms ease-in-out;
+  margin-top: 2px;
 
   &:hover {
     color: #fff;
@@ -103,7 +105,16 @@ export function SideNavigation(props: ISideNavigationProps) {
         <TopSection>
           <BrandLogo size="lg" diagnol={true} />
           <MiscWrapper>
-            <Search />
+            <Search data-tip data-for="search-tooltip" />
+            <ReactTooltip
+              id="search-tooltip"
+              className="react-tooltip"
+              effect="solid"
+              type="light"
+              place="top"
+            >
+              Coming Soon!
+            </ReactTooltip>
             <Cart count={cart || 0} pathname="/cart" />
           </MiscWrapper>
         </TopSection>
