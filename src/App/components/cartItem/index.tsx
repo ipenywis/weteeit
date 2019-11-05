@@ -82,10 +82,12 @@ export function CartItem(props: ICartItemProps) {
     price,
     __typename,
     updateCartItem,
-    removeCartItem
+    removeCartItem,
+    keyCode
   } = props;
 
   const item: ICartItem = {
+    keyCode,
     name,
     price,
     quantity,
@@ -98,19 +100,19 @@ export function CartItem(props: ICartItemProps) {
   };
 
   const onSizeChange = (size: string) => {
-    updateCartItem(name, { ...item, size });
+    updateCartItem(keyCode, { ...item, size });
   };
 
   const onColorChange = (color: string) => {
-    updateCartItem(name, { ...item, color });
+    updateCartItem(keyCode, { ...item, color });
   };
 
   const onQuantityChange = (quantity: number) => {
-    if (quantity >= 1) updateCartItem(name, { ...item, quantity });
+    if (quantity >= 1) updateCartItem(keyCode, { ...item, quantity });
   };
 
   const removeItemFromCart = () => {
-    removeCartItem(name);
+    removeCartItem(keyCode);
   };
 
   return (

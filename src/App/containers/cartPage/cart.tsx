@@ -120,14 +120,16 @@ class ShoppingCart extends React.Component<ICartProps> {
           {cart.length} {cart.length <= 1 ? "item" : "items"} in the bag!
         </MutedText>
         {!isCartEmpty &&
-          cart.map((cartItem, idx) => (
-            <CartItem
-              {...cartItem}
-              key={`${cartItem.name}-${idx}`}
-              updateCartItem={updateCartItem}
-              removeCartItem={removeCartItem}
-            />
-          ))}
+          cart.map((cartItem, idx) => {
+            return (
+              <CartItem
+                {...cartItem}
+                key={`${cartItem.name}-${cartItem.size}-${cartItem.color}-${cartItem.quantity}-${idx}`}
+                updateCartItem={updateCartItem}
+                removeCartItem={removeCartItem}
+              />
+            );
+          })}
         {isCartEmpty && (
           <CartIsEmptyWarning>Your Cart is Empty!</CartIsEmptyWarning>
         )}

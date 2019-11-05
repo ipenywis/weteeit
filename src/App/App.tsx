@@ -38,20 +38,27 @@ const App: React.FC = () => {
     });
   };
 
-  const updateCartItem = (name: string, newItem: ICartItem) => {
+  const setCartItem = (callback: (prevValue: ICartItem[]) => ICartItem[]) => {
+    setCart(cartItems => {
+      const newCartItems = callback(cartItems);
+      return [...newCartItems];
+    });
+  };
+
+  const updateCartItem = (key: string, newItem: ICartItem) => {
     setCart(cartItems => {
       const updatedCartItems = cartItems.map(item => {
-        if (item.name === name) return newItem;
+        if (item.keyCode === key) return newItem;
         return item;
       });
       return updatedCartItems;
     });
   };
 
-  const removeCartItem = (name: string) => {
+  const removeCartItem = (key: string) => {
     setCart(cartItems => {
       const filteredCartItems = cartItems.filter(item => {
-        return item.name !== name;
+        return item.keyCode !== key;
       });
       return filteredCartItems;
     });
@@ -59,7 +66,7 @@ const App: React.FC = () => {
 
   const AppContextValue = {
     cart,
-    setCart: setCartWithConstraints,
+    setCart: setCartItem,
     updateCartItem,
     removeCartItem,
     setCanOrder,

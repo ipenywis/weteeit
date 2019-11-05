@@ -14,6 +14,7 @@ import { Location, History } from "history";
 import { ICartItem } from "../../typings/cart";
 import { IProduct } from "../../typings/product";
 import { Popup } from "../../components/popup";
+import { randomTimeKey } from "../../../utils/common";
 
 export interface IProductInfoProps extends IProduct {
   location: Location;
@@ -122,8 +123,12 @@ class ProductInfo extends React.Component<IProductInfoProps> {
     const { id, __typename, type, name, price, imageUrl, cart } = this.props;
     const { size, color, quantity, isPopupOpen } = this.state;
 
+    //NOTE: Random key for adding multiple instances of same product type to the cart
+    const keyCode = randomTimeKey();
+
     const item: ICartItem = {
       __typename,
+      keyCode,
       id,
       type,
       name,
@@ -172,16 +177,16 @@ class ProductInfo extends React.Component<IProductInfoProps> {
           <Button
             large={true}
             onClick={() => this.addToCart(item)}
-            disabled={isItemInCart}
+            //disabled={isItemInCart}
           >
             Add to Cart
           </Button>
         </QuantityContainer>
-        <InfoContainer>
+        {/*<InfoContainer>
           {isItemInCart && (
             <InfoText>This {item.type} is already in your Cart</InfoText>
           )}
-        </InfoContainer>
+          </InfoContainer>*/}
         {isPopupOpen && <SuccessPopup />}
       </ProductInfoContainer>
     );

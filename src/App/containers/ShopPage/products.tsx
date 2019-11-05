@@ -10,6 +10,7 @@ import { Pagination } from "./pagination";
 import { ApolloClient } from "apollo-boost";
 import { IProduct } from "../../typings/product";
 import { IPagination } from "../../typings/pagination";
+import { randomTimeKey } from "../../../utils/common";
 
 const ProductsContainer = styled.div`
   width: 100%;
@@ -101,8 +102,6 @@ class Products extends React.Component<IProductsProps, IProductsState> {
       this.setState({ errors: ["Please Select a Product Type!!"] });
       return false;
     }
-
-    console.log("Product Type: ", activeProductType);
 
     const response = await client
       .query({

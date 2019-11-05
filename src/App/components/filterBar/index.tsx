@@ -41,7 +41,6 @@ export function FilterBar(props: IFilterBarProps) {
     <FiltersContainer>
       {filterItems.map((itemKey, idx) => {
         const item = Filters[itemKey];
-        console.log("Filter item: ", itemKey, props.currentActive);
         return (
           <FilterItem
             key={`${itemKey}-${idx}`}

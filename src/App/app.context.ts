@@ -5,8 +5,8 @@ export interface IAppContextProps {
   cart: ICartItem[];
   instructions: string | null;
   setCart: (callback: (prevValue: ICartItem[]) => ICartItem[]) => void;
-  updateCartItem: (name: string, newItem: ICartItem) => void;
-  removeCartItem: (name: string) => void;
+  updateCartItem: (key: string, newItem: ICartItem) => void;
+  removeCartItem: (key: string) => void;
   setCanOrder: (canOrder: boolean) => void;
   setInstructions: (instructions: string) => void;
 
