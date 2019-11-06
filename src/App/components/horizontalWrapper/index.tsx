@@ -1,5 +1,6 @@
 import * as React from "react";
 import styled from "styled-components/macro";
+import { device } from "../../../style/responsive";
 
 interface IHorizontalWrapperProps {
   width?: string;
@@ -18,6 +19,10 @@ const HorizontalContainer = styled.div`
   justify-content: ${props =>
     (props.spaceBetween && "space-between") ||
     (props.spaceEvenly && "space-evenly")};
+
+  @media ${device.mobile} {
+    flex-direction: column;
+  }
 `;
 
 export function HorizontalWrapper(props: IHorizontalWrapperProps) {
