@@ -45,8 +45,6 @@ const CustomBorderButton = styled(BorderButton)`
 `;
 
 export default function HomePage(props: any) {
-  const [isPopupOpen, setPopup] = useState(false);
-
   return (
     <PageContainer>
       <HomePageContainer>

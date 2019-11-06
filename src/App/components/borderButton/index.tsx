@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components/macro";
 import { Link } from "react-router-dom";
+import { device } from "../../../style/responsive";
 
 export interface IBorderButtonProps {
   large?: boolean;
@@ -36,6 +37,12 @@ export const ButtonContainer = styled.button`
     background-color: #a2a2a2;
     color: #fff;
     cursor: not-allowed;
+  }
+
+  @media ${device.mobile} {
+    margin-bottom: 0.8em;
+    width: auto;
+    font-size: 25px !important;
   }
 `;
 

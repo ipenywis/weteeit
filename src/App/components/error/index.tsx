@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { device } from "../../../style/responsive";
 
 export interface IErrorProps {
   message: string | any;
@@ -22,11 +23,19 @@ const ErrorText = styled.div`
   color: #e74c3c;
   font-weight: bold;
   margin-bottom: ${({ small }: IErrorProps) => (small ? "10px" : "25px")};
+
+  @media ${device.mobile} {
+    font-size: 23px;
+  }
 `;
 const ErrorMessage = styled.div`
   font-size: ${({ small }: IErrorProps) => (small ? "19px" : "23px")};
   color: #d3d3d3;
   font-weight: lighter;
+
+  @media ${device.mobile} {
+    font-size: 19px;
+  }
 `;
 
 export function ErrorWrapper(props: IErrorProps) {
