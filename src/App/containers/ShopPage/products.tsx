@@ -11,6 +11,7 @@ import { ApolloClient } from "apollo-boost";
 import { IProduct } from "../../typings/product";
 import { IPagination } from "../../typings/pagination";
 import { randomTimeKey } from "../../../utils/common";
+import { device } from "../../../style/responsive";
 
 const ProductsContainer = styled.div`
   width: 100%;
@@ -22,6 +23,7 @@ const ShowcaseContainer = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  justify-content: center;
 `;
 
 const ShowcaseItem = styled.div`
@@ -38,6 +40,10 @@ const ShowcaseItem = styled.div`
 
   &:hover {
     filter: brightness(0.8) contrast(0.9);
+  }
+
+  @media ${device.mobile} {
+    flex-basis: 11em;
   }
 `;
 

@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import styled, { css } from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronLeft,
   faChevronRight
 } from "@fortawesome/free-solid-svg-icons";
+import MediaQuery, { useMediaQuery } from "react-responsive";
+import { size, device } from "../../../style/responsive";
 
 export interface IPaginationProps {
   pageId: number | null;
@@ -61,6 +63,10 @@ const PageInfo = styled.div`
   font-size: 20px;
   color: #3d3d3d;
   font-weight: 600;
+
+  @media ${device.mobile} {
+    font-size: 16px;
+  }
 `;
 
 interface IPaginationState {
@@ -115,7 +121,9 @@ export class Pagination extends React.Component<IPaginationProps> {
         <InnerContainer>
           <Navigator active={isPreviousActive} onClick={onPreviousClick}>
             <FontAwesomeIcon icon={faChevronLeft} />
-            <div>Previous</div>
+            <MediaQuery maxWidth={size.mobileMinWidth}>
+              {matches => !matches && <div>Previous</div>}
+            </MediaQuery>
           </Navigator>
           <PageInfo>
             Showing {count === 0 ? 1 : count}-
@@ -123,7 +131,9 @@ export class Pagination extends React.Component<IPaginationProps> {
             {numProducts} awesome products
           </PageInfo>
           <Navigator active={isNextActive} onClick={onNextClick}>
-            <div>Next</div>
+            <MediaQuery maxWidth={size.mobileMinWidth}>
+              {matches => !matches && <div>Next</div>}
+            </MediaQuery>{" "}
             <FontAwesomeIcon icon={faChevronRight} />
           </Navigator>
         </InnerContainer>

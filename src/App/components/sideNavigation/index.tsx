@@ -116,7 +116,7 @@ const MenuContainer = styled.div`
   justify-content: flex-start;
   align-items: center;
   position: relative;
-  margin-bottom: 8px;
+  margin-bottom: 2em;
 `;
 
 const MenuIcon = styled.div`

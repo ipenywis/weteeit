@@ -10,11 +10,16 @@ import { FilterBar } from "../../components/filterBar";
 import { Filters, IFilterItem } from "../../components/filterBar/constants";
 import styled from "styled-components";
 import { withRouter } from "react-router";
+import { device } from "../../../style/responsive";
 
 const MainContainer = styled.div`
   width: 100%;
   overflow-y: auto;
   margin-left: 1em;
+
+  @media ${device.mobile} {
+    margin: 0;
+  }
 `;
 
 function ShopPage(props: any) {

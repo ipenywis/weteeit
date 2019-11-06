@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Filters, IFilterItem } from "./constants";
+import { device } from "../../../style/responsive";
 
 export interface IFilterBarProps {
   currentActive: string;
@@ -15,6 +16,12 @@ const FiltersContainer = styled.div`
   justify-content: space-evenly;
   align-items: center;
   padding: 15px 2em;
+  flex-wrap: wrap;
+
+  @media ${device.mobile} {
+    height: auto;
+    margin: 1em 0 1em 0;
+  }
 `;
 
 interface IFilterItemProps {
@@ -28,10 +35,13 @@ const FilterItem = styled.div`
       ? "#000"
       : "rgba(15, 15, 15, 0.2)"};
   font-size: 27px;
-  font-weight: 500;
   font-weight: 700;
   cursor: pointer;
   transition: color 260ms ease-in-out;
+
+  @media ${device.mobile} {
+    font-size: 19px;
+  }
 `;
 
 export function FilterBar(props: IFilterBarProps) {
