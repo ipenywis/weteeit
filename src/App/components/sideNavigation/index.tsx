@@ -157,7 +157,7 @@ export function SideNavigation(props: ISideNavigationProps) {
       </MenuContainer>
     );
 
-  if (isMobile && isOpen)
+  if ((isMobile && isOpen) || !isMobile)
     return (
       <SideNavContainer>
         {!isMobile && <TopNotch />}
