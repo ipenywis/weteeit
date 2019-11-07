@@ -17,6 +17,7 @@ const DevelopedBy = styled.a`
   color: #a5a5a5;
   transition: all 250ms ease-in-out;
   margin-top: 4px;
+  margin-bottom: 5px;
 
   &:hover {
     color: #fff;
@@ -75,7 +76,7 @@ export default function HomePage(props: any) {
         <VerticalWrapper>
           <Social />
           <DevelopedBy href={DEVELOPER_LINK}>
-            Developed By IslemPenywis
+            Developed With ❤️ By Ipenywis Team
           </DevelopedBy>
         </VerticalWrapper>
       </HomePageContainer>

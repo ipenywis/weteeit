@@ -190,7 +190,7 @@ export function SideNavigation(props: ISideNavigationProps) {
             <Social />
             <Copyright to="/about">Copyright @ 2019 Weteeit</Copyright>
             <DevelopedBy href={DEVELOPER_LINK}>
-              Developed By IslemPenywis
+              Developed With ❤️ By Ipenywis Team
             </DevelopedBy>
           </BottomSection>
         </InnerContainer>
