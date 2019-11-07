@@ -15,6 +15,7 @@ import { ICartItem } from "../../typings/cart";
 import { IProduct } from "../../typings/product";
 import { Popup } from "../../components/popup";
 import { randomTimeKey } from "../../../utils/common";
+import { device } from "../../../style/responsive";
 
 export interface IProductInfoProps extends IProduct {
   location: Location;
@@ -54,6 +55,13 @@ const Price = styled.div`
 const QuantityContainer = styled(HorizontalWrapper)`
   width: 100%;
   margin-top: 2em;
+
+  @media ${device.mobile} {
+    margin-bottom: 1em;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 10em;
+  }
 `;
 
 const InfoContainer = styled(VerticalWrapper)`

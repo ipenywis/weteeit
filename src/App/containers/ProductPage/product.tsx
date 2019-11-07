@@ -15,6 +15,7 @@ import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { withRouter } from "react-router-dom";
 import { History } from "history";
 import { AppContext, IAppContextProps } from "../../app.context";
+import { device } from "../../../style/responsive";
 
 export interface IProductProps {
   productName: string;
@@ -49,6 +50,13 @@ const InnerContainer = styled(HorizontalWrapper)`
   justify-content: space-evenly;
 `;
 
+const SidesContainer = styled(InnerContainer)`
+  @media ${device.mobile} {
+    flex-direction: column-reverse;
+    align-items: center;
+  }
+`;
+
 const LeftContainer = styled.div`
   display: flex;
   height: 100%;
@@ -62,6 +70,13 @@ const RightContainer = styled.div`
   img {
     width: 100%;
     height: 100%;
+  }
+
+  @media ${device.mobile} {
+    max-width: 27em;
+    min-height: 24em;
+    margin-bottom: 20px;
+    margin-top: 15px;
   }
 `;
 
@@ -152,10 +167,10 @@ class Product extends React.Component<IProductProps, IProductState> {
                       }
                       const item = props.data.product as IProduct;
                       return (
-                        <InnerContainer>
+                        <SidesContainer>
                           {this.renderLeftSide(item, cart, setCart)}
                           {this.renderRightSide(item)}
-                        </InnerContainer>
+                        </SidesContainer>
                       );
                     }}
                   </Query>
