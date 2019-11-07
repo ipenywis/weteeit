@@ -106,7 +106,8 @@ const CenteredVerticalWrapper = styled(VerticalWrapper)`
 function SuccessPopup() {
   return (
     <Popup isOpen={true} icon={faSmileBeam}>
-      Your Order Has Been Placed, Your items are on the way
+      Your Order Has Been Placed, Your items are on the way We will contact you
+      shortly.
     </Popup>
   );
 }

@@ -10,6 +10,9 @@
     "@types/jest": "24.0.13",
     "@types/node": "12.0.7",
     "apollo-boost": "^0.4.3",
+    "chalk": "^2.4.2",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
     "graphql": "^14.3.1",
     "graphql-typescript-definitions": "^0.17.2",
     "react": "^16.8.6",
@@ -24,6 +27,7 @@
     "styled-components": "^4.3.1"
   },
   "scripts": {
+    "start:prod": "node server.js",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
