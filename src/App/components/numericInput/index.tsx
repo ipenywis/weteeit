@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { device } from "../../../style/responsive";
 
 export interface INumericInputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {}
@@ -14,6 +15,12 @@ const Input = styled.input`
   font-family: "Open Sans", sans-serif;
   padding: 14px;
   outline: none;
+
+  @media ${device.mobile} {
+    width: 3em;
+    height: 2.6em;
+    padding: 5px;
+  }
 `;
 
 export function NumericInput(props: INumericInputProps) {

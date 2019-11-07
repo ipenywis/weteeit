@@ -8,6 +8,7 @@ import { HorizontalWrapper } from "../../components/horizontalWrapper";
 import { Button } from "../../components/button";
 import { withRouter } from "react-router";
 import { IWithRouterProps } from "../../typings/common";
+import { device } from "../../../style/responsive";
 
 export interface ICartProps extends IWithRouterProps {
   cart: ICartItem[];
@@ -24,12 +25,21 @@ const CartContainer = styled(VerticalWrapper)`
   align-items: flex-start;
   padding: 35px;
   overflow-y: auto;
+
+  @media ${device.mobile} {
+    margin-top: 1em;
+    padding: 10px;
+  }
 `;
 
 const Title = styled.div`
   font-size: 52px;
   font-weight: 800;
   color: #3d3d3d;
+
+  @media ${device.mobile} {
+    font-size: 32px;
+  }
 `;
 
 const MutedText = styled.div`
@@ -71,6 +81,10 @@ const Total = styled.div`
   font-weight: 800;
   color: #3d3d3d;
   margin-top: 1em;
+
+  @media ${device.mobile} {
+    font-size: 30px;
+  }
 `;
 const FooterContainer = styled(VerticalWrapper)`
   width: 100%;

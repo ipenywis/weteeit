@@ -8,6 +8,8 @@ import { ColorDropdown } from "../colorSelector";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { NumericInput } from "../numericInput";
+import { device } from "../../../style/responsive";
+import { HorizontalWrapper } from "../horizontalWrapper";
 
 export interface ICartItemProps extends ICartItem {
   updateCartItem: IAppContextProps["updateCartItem"];
@@ -24,6 +26,11 @@ const CartItemContainer = styled.div`
   margin-top: 3em;
   align-items: center;
   position: relative;
+
+  @media ${device.mobile} {
+    flex-direction: column;
+    min-height: auto;
+  }
 `;
 
 const Image = styled.div`
@@ -55,6 +62,19 @@ const MutedText = styled.div`
   width: fit-content;
 `;
 
+const ControlsContainer = styled(HorizontalWrapper)`
+  justify-content: center;
+  align-items: center;
+
+  @media ${device.mobile} {
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+  }
+`;
+
 const RemoveIconWrapper = styled.div`
   position: absolute;
   right: 3em;
@@ -67,6 +87,11 @@ const RemoveIconWrapper = styled.div`
     &:hover {
       filter: contrast(0.3);
     }
+  }
+
+  @media ${device.mobile} {
+    top: 2em;
+    right: 11px;
   }
 `;
 
@@ -124,12 +149,14 @@ export function CartItem(props: ICartItemProps) {
         <Name>{name}</Name>
         <MutedText>{price} DZD</MutedText>
       </DetailsContainer>
-      <SizeDropdown onSelect={onSizeChange} selected={item.size} />
-      <ColorDropdown onSelect={onColorChange} selected={item.color} />
-      <NumericInput
-        value={quantity}
-        onChange={e => onQuantityChange(parseInt(e.target.value))}
-      />
+      <ControlsContainer>
+        <SizeDropdown onSelect={onSizeChange} selected={item.size} />
+        <ColorDropdown onSelect={onColorChange} selected={item.color} />
+        <NumericInput
+          value={quantity}
+          onChange={e => onQuantityChange(parseInt(e.target.value))}
+        />
+      </ControlsContainer>
       <RemoveIconWrapper onClick={removeItemFromCart}>
         <FontAwesomeIcon icon={faTrashAlt} size="2x" />
       </RemoveIconWrapper>

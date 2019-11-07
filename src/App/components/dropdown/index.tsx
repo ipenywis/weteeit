@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { device } from "../../../style/responsive";
 
 export interface IDropdownProps {
   options: string[];
@@ -19,6 +20,12 @@ const DropdownContainer = styled.select`
   outline: none;
   margin: 0.6em;
   background-color: #fff;
+
+  @media ${device.mobile} {
+    min-width: 1em;
+    min-height: 2.6em;
+    padding: 5px;
+  }
 `;
 
 export function Dropdown(props: IDropdownProps) {

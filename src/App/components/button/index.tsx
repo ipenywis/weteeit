@@ -1,6 +1,7 @@
 import React from "react";
 import styled, { css } from "styled-components/macro";
 import { Link } from "react-router-dom";
+import { device } from "../../../style/responsive";
 export interface IButtonProps {
   /** Component to render as Button Container*/ omponent?: JSX.Element;
   /** Path to navigate to on button click */
@@ -37,6 +38,11 @@ export const ButtonContainer = styled.button`
     color: #000;
     cursor: not-allowed;
   }
+
+  @media ${device.mobile} {
+    width: auto;
+    font-size: 25px !important;
+  }
 `;
 
 function Button(props: IButtonProps) {
@@ -44,13 +50,13 @@ function Button(props: IButtonProps) {
 
   if (to)
     return (
-      <ButtonContainer {...props as any}>
+      <ButtonContainer {...(props as any)}>
         <Link to={to}>{props.children}</Link>
       </ButtonContainer>
     );
   else
     return (
-      <ButtonContainer {...props as any}>{props.children}</ButtonContainer>
+      <ButtonContainer {...(props as any)}>{props.children}</ButtonContainer>
     );
 }
 
