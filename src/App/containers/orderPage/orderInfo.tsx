@@ -4,8 +4,16 @@ import { IAppContextProps } from "../../app.context";
 import { VerticalWrapper } from "../../components/verticalWrapper";
 import { Divider } from "../../components/divider";
 import { HorizontalWrapper } from "../../components/horizontalWrapper";
+import { device, size } from "../../../style/responsive";
+import { BrandLogo } from "../../components/brandLogo";
+import { useMediaQuery } from "react-responsive";
+import { CancelOrder } from "./cancelOrder";
+import { withRouter } from "react-router";
+import { IWithRouterProps } from "../../typings/common";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-export interface IOrderInfo {
+export interface IOrderInfo extends IWithRouterProps {
   cart: IAppContextProps["cart"];
   shippingPrice: number | null;
 }
@@ -19,8 +27,13 @@ const OrderInfoContainer = styled.div`
   height: 100%;
   display: flex;
   flex: 1;
-  background-color: #f5f5f5;
-  padding: 30px;
+  flex-direction: column;
+
+  @media ${device.mobile} {
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+  }
 `;
 
 const InnerContainer = styled.div`
@@ -28,6 +41,12 @@ const InnerContainer = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
+  background-color: #f5f5f5;
+  padding: 30px;
+
+  @media ${device.mobile} {
+    padding: 1.3em 5px;
+  }
 `;
 
 const OrderProductContainer = styled.div`
@@ -84,7 +103,13 @@ const SpacedWrapper = styled(HorizontalWrapper)`
   justify-content: space-between;
 `;
 
-export default function OrderInfo(props: IOrderInfo) {
+const TopContainer = styled(HorizontalWrapper)`
+  width: 100%;
+  justify-content: center;
+  position: relative;
+`;
+
+function OrderInfo(props: IOrderInfo) {
   const { cart, shippingPrice } = props;
 
   //Calculate Subtotal
@@ -99,8 +124,22 @@ export default function OrderInfo(props: IOrderInfo) {
   //TODO: Add Shipping to AppContext
   const total = typeof shipping === "string" ? shipping : subtotal + shipping;
 
+  const isMobile = useMediaQuery({ maxWidth: size.mobileMinWidth });
+
+  const cancelOrder = () => {
+    props.history.push("cart");
+  };
+
   return (
     <OrderInfoContainer>
+      {isMobile && (
+        <TopContainer>
+          <BrandLogo color="black" size="xxl" diagnol={true} />
+          <CancelOrder onClick={cancelOrder}>
+            <FontAwesomeIcon icon={faTimes} size="2x" />
+          </CancelOrder>
+        </TopContainer>
+      )}
       <InnerContainer>
         {cart.map((product, idx) => {
           return (
@@ -150,3 +189,5 @@ export default function OrderInfo(props: IOrderInfo) {
     </OrderInfoContainer>
   );
 }
+
+export default withRouter(OrderInfo);

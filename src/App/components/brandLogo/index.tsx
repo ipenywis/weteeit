@@ -12,7 +12,7 @@ export interface IBrandLogoProps {
 const BrandLogoContainer = styled.div`
   /*width: 7.5em;
   height: 3em;*/
-  transform: ${(props: IBrandLogoProps) => props.diagnol && "rotate(-1deg)"};
+  transform: ${(props: IBrandLogoProps) => props.diagnol && "rotate(7deg)"};
 
   width: ${(props: IBrandLogoProps) => {
     let width = "7.5em";

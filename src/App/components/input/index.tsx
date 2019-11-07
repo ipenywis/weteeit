@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { IInputError } from "../../typings/common";
 import { VerticalWrapper } from "../verticalWrapper";
+import { device } from "../../../style/responsive";
 
 export interface IInputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -16,6 +17,11 @@ const Wrapper = styled(VerticalWrapper)`
   width: 100%;
   &:last-of-type {
     margin-left: 8px;
+  }
+
+  @media ${device.mobile} {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
   }
 `;
 
@@ -41,6 +47,11 @@ const InputContainer = styled.input`
   &::placeholder {
     color: #79787857;
     font-weight: 800;
+  }
+
+  @media ${device.mobile} {
+    margin-left: 0;
+    margin-right: 0;
   }
 `;
 

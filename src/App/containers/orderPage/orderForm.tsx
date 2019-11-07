@@ -27,6 +27,9 @@ import { VerticalWrapper } from "../../components/verticalWrapper";
 import { InputFields } from "./constants";
 import { Popup } from "../../components/popup";
 import { parseWilayaShipping } from "../../../utils/common";
+import { device, size } from "../../../style/responsive";
+import MediaQuery from "react-responsive";
+import { CancelOrder } from "./cancelOrder";
 
 export interface IOrderFormProps extends IWithRouterProps {
   client: ApolloClient<any>;
@@ -45,6 +48,11 @@ const OrderFormContainer = styled.div`
   flex: 2;
   align-items: center;
   position: relative;
+
+  @media ${device.mobile} {
+    width: 100%;
+    padding: 9px;
+  }
 `;
 
 const InnerContainer = styled.div`
@@ -54,6 +62,11 @@ const InnerContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+
+  @media ${device.mobile} {
+    padding: 2px;
+    width: 100%;
+  }
 `;
 
 const Title = styled.div`
@@ -65,9 +78,7 @@ const Title = styled.div`
   margin-bottom: 2px;
 `;
 
-const InlineInputGroup = styled(HorizontalWrapper)`
-  flex-direction: row;
-`;
+const InlineInputGroup = styled(HorizontalWrapper)``;
 
 const InputContainer = styled.div`
   margin-bottom: 2em;
@@ -84,21 +95,6 @@ const SubmitButton = styled(Button)`
   font-size: 30px;
   padding: 0.4em 3em;
   border-radius: 10px;
-`;
-
-const CancelOrder = styled.div`
-  position: absolute;
-  top: 1em;
-  right: 2em;
-  color: #3d3d3d;
-  cursor: pointer;
-
-  svg {
-    transition: filter 200ms ease-in-out;
-    &:hover {
-      filter: contrast(0.3);
-    }
-  }
 `;
 
 const CenteredVerticalWrapper = styled(VerticalWrapper)`
@@ -393,8 +389,18 @@ class OrderForm extends React.Component<IOrderFormProps> {
     return (
       <OrderFormContainer>
         <HorizontalWrapper width="100%">
-          <BrandLogo color="black" size="xxl" />
-          <CenteredVerticalWrapper></CenteredVerticalWrapper>
+          <MediaQuery maxWidth={size.mobileMinWidth}>
+            {matches =>
+              !matches && (
+                <>
+                  <CancelOrder onClick={this.cancelOrder.bind(this)}>
+                    <FontAwesomeIcon icon={faTimes} size="2x" />
+                  </CancelOrder>
+                  <BrandLogo color="black" size="xxl" />
+                </>
+              )
+            }
+          </MediaQuery>
         </HorizontalWrapper>
         <InnerContainer>
           {submitError && <ErrorWrapper message={submitError} small />}
@@ -499,9 +505,6 @@ class OrderForm extends React.Component<IOrderFormProps> {
             </SubmitButton>
           </FooterContainer>
         </InnerContainer>
-        <CancelOrder onClick={this.cancelOrder.bind(this)}>
-          <FontAwesomeIcon icon={faTimes} size="2x" />
-        </CancelOrder>
         {isSuccessPopupOpen && <SuccessPopup />}
       </OrderFormContainer>
     );

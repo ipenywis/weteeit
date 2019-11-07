@@ -7,10 +7,17 @@ import OrderForm from "./orderForm";
 import OrderInfo from "./orderInfo";
 import styled from "styled-components";
 import { ApolloConsumer } from "react-apollo";
+import { device } from "../../../style/responsive";
 
 const StyledPageContainer = styled(PageContainer)`
   overflow-y: auto;
   height: 100%;
+`;
+
+const SidesContainer = styled(HorizontalWrapper)`
+  @media ${device.mobile} {
+    flex-direction: column-reverse;
+  }
 `;
 
 export default function OrderPage(props: any) {
@@ -25,7 +32,7 @@ export default function OrderPage(props: any) {
           {({ cart, setCart, instructions }) => (
             <StyledPageContainer>
               <HorizontalWrapper width="100%" height="100%">
-                <HorizontalWrapper width="100%" height="100%">
+                <SidesContainer width="100%" height="100%">
                   <OrderForm
                     client={client}
                     cart={cart}
@@ -35,7 +42,7 @@ export default function OrderPage(props: any) {
                     setShippingPrice={setShipping}
                   />
                   <OrderInfo cart={cart} shippingPrice={shipping} />
-                </HorizontalWrapper>
+                </SidesContainer>
               </HorizontalWrapper>
             </StyledPageContainer>
           )}
