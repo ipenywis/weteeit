@@ -12,6 +12,7 @@ import { ICartItem } from "./typings/cart";
 import CartPage from "./containers/cartPage";
 import OrderPage from "./containers/orderPage";
 import { PrivateRoute } from "./components/privateRoute";
+import AboutPage from "./containers/aboutPage";
 
 const App: React.FC = () => {
   //Apollo GraphQL Client
@@ -86,6 +87,7 @@ const App: React.FC = () => {
               <Route exact path="/shop" component={ShopPage} />
               <Route exact path="/shop/:name" component={ProductPage} />
               <Route exact path="/cart" component={CartPage} />
+              <Route exact path="/about" component={AboutPage} />
               <PrivateRoute
                 exact
                 allowAccess={canOrder}

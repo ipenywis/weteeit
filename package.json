@@ -28,6 +28,7 @@
   },
   "scripts": {
     "start:prod": "node server.js",
+    "prestart:prod": "rimraf ./build && npm run build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

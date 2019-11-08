@@ -23,7 +23,10 @@ const ShowcaseContainer = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: center;
+
+  @media ${device.mobile} {
+    justify-content: center;
+  }
 `;
 
 const ShowcaseItem = styled.div`
