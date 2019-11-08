@@ -5,6 +5,8 @@ import {
   faCheckCircle,
   IconDefinition
 } from "@fortawesome/free-solid-svg-icons";
+import { device, size } from "../../../style/responsive";
+import { useMediaQuery } from "react-responsive";
 
 export interface IPopupProps {
   children: any | any[];
@@ -35,6 +37,10 @@ const PopupInnerContainer = styled.div`
   padding: 4%;
   flex-direction: column;
   align-items: center;
+
+  @media ${device.mobile} {
+    margin: 0 1.3em;
+  }
 `;
 
 const IconContainer = styled.div`
@@ -48,10 +54,16 @@ const Content = styled.div`
   font-size: 22px;
   font-weight: 600;
   color: #3d3d3d;
+
+  @media ${device.mobile} {
+    font-size: 20px;
+  }
 `;
 
 export function Popup(props: IPopupProps) {
   const { isOpen, icon } = props;
+
+  const isMobile = useMediaQuery({ maxWidth: size.mobileMinWidth });
 
   if (!isOpen) return null;
 
@@ -59,7 +71,10 @@ export function Popup(props: IPopupProps) {
     <PopupContainer>
       <PopupInnerContainer>
         <IconContainer>
-          <FontAwesomeIcon icon={icon || faCheckCircle} size="6x" />
+          <FontAwesomeIcon
+            icon={icon || faCheckCircle}
+            size={isMobile ? "4x" : "6x"}
+          />
         </IconContainer>
         <Content>{props.children}</Content>
       </PopupInnerContainer>
