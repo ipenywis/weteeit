@@ -17,7 +17,7 @@ import AboutPage from "./containers/aboutPage";
 const App: React.FC = () => {
   //Apollo GraphQL Client
   const client = new ApolloClient({
-    uri: "http://localhost:3000/graphql"
+    uri: `${process.env.REACT_APP_API_URL}/graphql`
   });
 
   const [cart, setCart] = useState<ICartItem[]>([]);
